@@ -1,0 +1,14 @@
+<%
+msg = "must be #{@model.name}"
+msg = @model.params[0].name if !!@model.params[0]
+
+blk = "fail \"UNDER CONSTRUCTION #{@model.const}\""
+blk = @model.params[1].name if !!@model.params[1]
+
+dsc = "@todo provide description for #{@model.const}"
+dsc = @model.params[2].name if !!@model.params[2]
+-%>
+
+# <%= dsc %>
+<%= @model.const %> = Sentry.new(:key, "<%= msg %>"
+) {|v| <%= blk %> }

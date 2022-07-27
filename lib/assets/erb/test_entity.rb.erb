@@ -1,0 +1,10 @@
+<% require 'punch/gadgets/erb_helper' -%>
+<%= test_helper %>
+include <%= @model.namespace %>
+
+describe <%= @model.const %> do
+  # let(:entity) { <%= @model.const %>.new(<%= parameters_string %>) }
+
+  it 'must do something' do
+  end
+end

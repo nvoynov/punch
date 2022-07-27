@@ -1,0 +1,32 @@
+<%
+require 'punch/gadgets/erb_helper'
+# why the next line does not work?
+# include Punch::ErbHelper
+-%>
+# frozen_string_literal: true
+
+require_relative 'dummy'
+
+<%= open_namespace %>
+<%= @spacer %>class <%= @model.const %> < Entity
+<%= define_properties %>
+<%= @spacer %>  def initialize(<%= parameters_string %>)
+<%= assing_properties -%>
+<%= @spacer %>  end
+<%= @spacer %>end
+
+<%= close_namespace %>
+
+<%= open_namespace %>
+<%= @spacer %>class <%= @model.const %> < Service
+<%= @spacer %>  def initialize(<%= parameters_string %>)
+<%= assing_properties -%>
+<%= @spacer %>  end
+
+<%= @spacer %>  def call
+<%= @spacer %>    # entity = Entity.new(<%= arguments_string %>)
+<%= @spacer %>    # gateway.<%= @model.name %>(entity)
+<%= @spacer %>  end
+<%= @spacer %>end
+
+<%= close_namespace %>

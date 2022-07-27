@@ -1,0 +1,19 @@
+<% require 'punch/gadgets/erb_helper' -%>
+<%= test_helper %>
+include <%= @model.namespace %>
+
+describe <%= @model.const %> do
+
+  # @todo provide valid and wrong samples
+  let(:valid) { [nil, -1, 0, 1, "", "string", Object.new] }
+  let(:wrong) { [nil, -1, 0, 1, "", "string", Object.new] }
+
+  it 'must accept valid values' do
+    valid.each{|val| <%= @model.const %>.(v)}
+  end
+
+  it 'must fail for wrong values' do
+    wrong.each{|val| assert_raises(ArgumentError) { <%= @model.const %>.(v) }}
+  end
+
+end

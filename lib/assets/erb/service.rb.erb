@@ -1,0 +1,21 @@
+# frozen_string_literal: true
+require_relative 'service'
+
+<% require 'punch/gadgets/erb_helper' -%>
+<%= open_namespace -%>
+
+<%= @spacer %>class <%= @model.const %> < Service
+<%= @spacer %>  def initialize(<%= parameters_string %>)
+<%= assing_properties -%>
+<%= @spacer %>  end
+
+<%= @spacer %>  def call
+<%= @spacer %>    # user = storage.find_user(@email)
+<%= @spacer %>    # fail Failure, "Email already exists" if user
+<%= @spacer %>    # user = User.new(<%= arguments_string %>)
+<%= @spacer %>    # storage.save(user)
+<%= @spacer %>    fail Failure, 'UNDER CONSTRUCTION'
+<%= @spacer %>  end
+<%= @spacer %>end
+
+<%= close_namespace %>

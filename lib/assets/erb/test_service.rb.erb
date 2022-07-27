@@ -1,0 +1,24 @@
+<% require 'punch/gadgets/erb_helper' -%>
+<%= test_helper %>
+include <%= @model.namespace %>
+
+describe <%= @model.const %> do
+  let(:service) { <%= @model.const %> }
+<% unless @model.params.empty? -%>
+  # @todo provide arguments samples
+  let(:params) { {<%= parameters_string %>} }
+<% end -%>
+
+  describe 'failure' do
+    it 'must fail' do
+      # assert_raises(ArgumentError) { service.() }
+    end
+  end
+
+  describe 'success' do
+    it 'must succeed' do
+      # result = service.(params)
+      # assert result
+    end
+  end
+end

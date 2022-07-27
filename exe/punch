@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "punch"
+require "punch/gateways"
+require "punch/cli"
+include Punch::CLI
+include Punch::Gateways
+
+# initialize logger in pwd
+LoggerPort.gateway = Logr.new('punch.log')
+
+if ARGV.empty?
+  puts banner
+  exit
+end
+
+command = ARGV.shift.downcase
+case command
+when 'new'   # create new punched
+  create(ARGV.shift)
+when 'init'  # init punch there
+  init
+when 'clone' # punch could be cloning some other than Clean in future
+  clone(ARGV.shift)
+when /(sentry|entity|service)/
+  punch(ARGV.unshift(command))
+when /preview/
+  preview(ARGV)
+else
+  unknown(command)
+end
