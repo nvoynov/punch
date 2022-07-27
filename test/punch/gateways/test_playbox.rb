@@ -1,5 +1,7 @@
 require_relative '../../test_helper'
 include Punch::Gateways
+require 'fileutils'
+include FileUtils
 
 describe Playbox do
 
@@ -63,9 +65,11 @@ describe Playbox do
 
   describe '#read_sentries_source' do
     let(:dummy) { 'module Dummy; end'}
-
     it 'must read sentries file when exist' do
       Sandbox.() do
+        filename = playbox.sentries_source_file
+        File.dirname(filename) # create folder unless exists
+          .then{|dir| makedirs(dir) unless Dir.exist?(dir)}
         File.write(playbox.sentries_source_file, dummy)
         assert_equal dummy, playbox.read_sentries_source
       end
