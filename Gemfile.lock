@@ -17,6 +17,7 @@ GEM
 
 PLATFORMS
   x64-mingw32
+  x86_64-linux
 
 DEPENDENCIES
   clean (~> 0.1.0)!
