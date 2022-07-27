@@ -98,8 +98,8 @@ describe 'exe/punch' do
       out, _ = capture_subprocess_io { system("bundle") }
       out, _ = capture_subprocess_io { system(cmd) }
       # how to test there?
-      puts out
-      puts File.read('punch.log')
+      # puts out
+      # puts File.read('punch.log')
       assert_match %r{users/create_user.rb}, out
       assert_match %r{users/test_create_user.rb}, out
     end
