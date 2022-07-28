@@ -39,3 +39,9 @@ def map_logged_to_exist(log)
     .map{|l| l.split(?\s).last }
     .map{|f| File.exist?(f) }
 end
+
+def print_debug_info(message = '')
+  puts "\ndebug>> #{message}"
+  puts Dir.pwd
+  pp Dir.glob('**/*')
+end

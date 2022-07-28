@@ -91,14 +91,13 @@ module Punch
       def punch(model, source_code, test_code)
         [].tap do |log|
           log << write(model.source_file, source_code)
-          log << write(model.test_file, test_code)
-
           # include
           klass_require = read_require_file(model)
           unless klass_require.match(model.require_string)
             klass_require += "require_relative '#{model.require_string}'"
             log << write(model.require_file, klass_require)
           end
+          log << write(model.test_file, test_code)
         end.flatten
       end
 

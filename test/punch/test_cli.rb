@@ -4,11 +4,7 @@ describe CLI do
 
   # the "preview" command replaces Playbox, to it should be set here
   before do
-    Gateways::PlayboxPort.gateway = Gateways::Playbox.new
-  end
-
-  it 'must provide banner' do
-    assert_equal CLI::BANNER, CLI.banner
+    PlayboxPort.gateway = Playbox.new
   end
 
   describe '#log_and_rescue' do
@@ -123,6 +119,14 @@ describe CLI do
   end
 
   describe '#preview' do
+    before do
+      @playbox = PlayboxPort.gateway
+    end
+
+    after do
+      PlayboxPort.gateway = @playbox
+    end
+
     it 'must preview' do
       _, _ = capture_io {
         CLI.preview %w(service users/create_user name:string email:string)

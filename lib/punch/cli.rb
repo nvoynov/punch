@@ -14,11 +14,6 @@ module Punch
     def_delegator :PlayboxPort, :gateway, :playbox
     def_delegator :LoggerPort, :gateway, :logger
 
-    def unknown(command)
-      puts "Unknown command \"#{command}\"!"
-      puts banner
-    end
-
     def exit_with_message(msg, cnd)
       return if cnd
       puts msg
@@ -57,32 +52,36 @@ module Punch
     end
 
     def preview(*args)
-      # just change gateway!
+      # punch(*args) is already wrapped in log_and_rescue!
       PlayboxPort.gateway = Preview.new
-      log_and_rescue {
-        logger.info { "preview #{args}" }
-        punch(*args)
-      }
+      logger.info { "Playbox changed to preview" }
+      logger.info { "preview #{args.join(?\s)}"  }
+      punch(*args)
     end
 
     def log_and_rescue
       log = yield
-      return if log.empty?
+      # @todo ensure that result yeild is array of string?
+      unless !!log && log.is_a?(Array) && log.any?
+        logger.info { "no result returned" }
+        return
+      end
+      logger.info(log.is_a?(Array) ? log.join(", ") : log)
+      return unless log.is_a?(Array)
       log.map{|item|
         actn = item =~ /~$/ ? 'backup' : 'create'
         puts "  #{actn} #{item}"
       }
-      logger.info(log.is_a?(Array) ? log.join(", ") : log)
+    # something that we wait for
     rescue StandardError => ex
       logger.error(ex)
       puts <<~EOF
         #{ex.message} (#{ex.class.name})
         see the error details inside #{logger.device}
       EOF
-    end
-
-    def banner
-      BANNER
+    # some unexpected
+    rescue => ex
+      puts ex
     end
 
     def motto
@@ -90,29 +89,6 @@ module Punch
     end
 
     MOTTO = "Keep code clean, and happy punching!".freeze
-
-    BANNER = <<~EOF.freeze
-
-     - Punch v#{Punch::VERSION} Clean Code Puncher -
-
-     To learn more about punch visit
-       https://github.com/nvoynov/punch
-       https://github.com/nvoynov/clean
-
-     Quickstart
-       1. gem "punch" to Gemfile
-       2. $ punch
-
-     Usage
-       $ punch new PROJECT
-       $ punch init
-       $ punch clone clean
-       $ punch sentry NAME [PARA1 PARA2]
-       $ punch entity NAME [PARA1 PARA2]
-       $ punch service NAME [PARA1 PARA2]
-       $ punch geteway NAME
-       $ punch preview sentry|entity|service|gateway
-    EOF
   end
 
 end

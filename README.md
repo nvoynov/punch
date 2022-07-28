@@ -88,22 +88,7 @@ __The only current problem with templates__ relates to requiring basic concepts 
 
 So today it is just the `require_relative 'service'` and it should be fixed manually.
 
-I rather prefer to create project-specific gadgets
-
-```ruby
-# lib/gadgets/service.rb
-require 'clean'
-require 'forwardable'
-
-module App
-  class Service < Clean::Service
-    extend Forwardable
-    def_delegator :StoragePort, :gateway, :storage
-    def_delegator :PlayboxPort, :gateway, :playbox
-    # ...
-  end
-end
-```
+I rather prefer to create project-specific service because there is always  project-specific something that could be included. As an example see Punch original [service.rb](https://github.com/nvoynov/punch/blob/master/lib/punch/services/service.rb) that includes quite a few gadgets and gateways.
 
 ### Configuration
 

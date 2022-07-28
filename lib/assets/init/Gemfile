@@ -8,8 +8,6 @@ source "https://rubygems.org"
 group :development do
   gem "rake"
   gem "minitest"
-  gem "punch", "~> 0.1.0", git: "https://github.com/nvoynov/punch.git"
-  gem "clean", "~> 0.1.0", git: "https://github.com/nvoynov/clean.git"
-  # gem "clean", path: "../clean"
-  # gem "punch", path: "../punch"
+  gem "punch", "~> 0.1.1", git: "https://github.com/nvoynov/punch.git"
+  gem "clean", "~> 0.2.0", git: "https://github.com/nvoynov/clean.git"
 end

@@ -1,3 +1,4 @@
+require 'clean'
 require 'logger'
 require 'forwardable'
 
@@ -12,7 +13,10 @@ module Punch
       def initialize(device = IO::NULL)
         @device = device
         @logger = Logger.new(device, # 'punch.log',
-          datetime_format: '%Y-%m-%d %H:%M:%S'
+          datetime_format: '%Y-%m-%d %H:%M:%S',
+          formatter: proc{|severity, datetime, progname, msg|
+            "[#{datetime}] #{severity.ljust(5)}: #{msg}\n"
+          }
         )
       end
     end
@@ -32,28 +36,3 @@ end
 # rescue => ex
 #   logger.error ex
 # end
-
-
-
-
-
-# logger = Logger.new(STDOUT)
-# logger.level = Logger::WARN
-#
-# logger.debug("Created logger")
-# logger.info("Program started")
-# logger.warn("Nothing to do!")
-#
-# path = "a_non_existent_file"
-#
-# begin
-#   File.foreach(path) do |line|
-#     unless line =~ /^(\w+) = (.*)$/
-#       logger.error("Line in wrong format: #{line.chomp}")
-#     end
-#   end
-# rescue => err
-#   logger.fatal("Caught exception; exiting")
-#   logger.fatal(err)
-# end
-#

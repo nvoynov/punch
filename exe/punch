@@ -10,8 +10,27 @@ include Punch::Gateways
 # initialize logger in pwd
 LoggerPort.gateway = Logr.new('punch.log')
 
+BANNER = <<~EOF.freeze
+
+ - Punch v#{Punch::VERSION} Clean Code Puncher -
+ - https://github.com/nvoynov/punch
+
+ Start by
+   1. gem "punch", "~> 0.1.0", git: "https://github.com/nvoynov/punch.git"
+   2. $ punch
+
+ Usage
+   $ punch new PROJECT
+   $ punch init
+   $ punch clone clean
+   $ punch sentry NAME [PARA1 PARA2]
+   $ punch entity NAME [PARA1 PARA2]
+   $ punch service NAME [PARA1 PARA2]
+   $ punch preview sentry|entity|service|gateway
+EOF
+
 if ARGV.empty?
-  puts banner
+  puts BANNER
   exit
 end
 
@@ -28,5 +47,6 @@ when /(sentry|entity|service)/
 when /preview/
   preview(ARGV)
 else
-  unknown(command)
+  puts "Sorry, didn't get you"
+  puts banner
 end
