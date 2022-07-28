@@ -59,23 +59,13 @@ module Punch
     def preview(*args)
       # just change gateway!
       PlayboxPort.gateway = Preview.new
-      punch(*args)
-      # log_and_rescue do
-        # Sandbox.() {
-        #   logger.info { "preview #{args}" }
-        #   log = Services::Punch.(*args)
-        #   log.map{|l| l.split(?\s).last}
-        #     .each{|f|
-        #       puts "\n# #{'-' * f.size}"
-        #       puts "# #{f}"
-        #       puts "# #{'-' * f.size}\n"
-        #       puts File.read(f)
-        #     }
-        # }
-      # end
+      log_and_rescue {
+        logger.info { "preview #{args}" }
+        punch(*args)
+      }
     end
 
-    def log_and_rescue(context = '')
+    def log_and_rescue
       log = yield
       return if log.empty?
       log.map{|item|

@@ -10,14 +10,27 @@ include Punch::Gateways
 class FileBox
   # Execute block inside temp folder
   def self.call
-    Dir.mktmpdir(['punch']) do |dir|
+    Dir.mktmpdir([TMPRX]) do |dir|
       Dir.chdir(dir) { yield }
     end
   end
+  TMPRX = 'punchbox'.freeze
 end
 
-TMPRX = 'punch'
-DUMMY = 'dummy'
+class Sandbox
+  def self.call
+    Dir.mktmpdir([TMPRX]) do |dir|
+      Dir.chdir(dir) do
+        playbox = Gateways::PlayboxPort.gateway
+        playbox.punch_dir(DUMMY)
+        Dir.chdir(DUMMY){ yield }
+      end
+    end
+  end
+
+  TMPRX = 'punch'.freeze
+  DUMMY = 'dummy'.freeze
+end
 
 def map_logged_to_exist(log)
   # @todo remove CLI::MOTTO

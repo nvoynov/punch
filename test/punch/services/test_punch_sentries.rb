@@ -15,9 +15,6 @@ describe Services::PunchSentries do
   end
 
   describe '#success' do
-    # @todo read parameters inside ""
-    #       sentry string "description" "v.is_a?(String) && !v.empty?"
-    # it must bonus from command line :)
     let(:sentry) { "sentry string message v.is_a?(String) description" }
     let(:sentries) {[
       "sentry string message v.is_a?(String) description",
