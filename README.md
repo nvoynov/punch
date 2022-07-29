@@ -2,9 +2,9 @@
 
 The Punch is a source code generator based on [Clean](https://github.com/nvoynov/clean) that is my sort of adaptation of The Clean Architecture principles.
 
-It was born for the purpose of boosting code architecture with Clean concepts and increasing productivity by eliminating tedious work by generating source code skeletons instead of writing it manually. You can look through [User Stories](UserStories.md) for basic ideas.
+It was born for the purpose of boosting code architecture with Clean concepts and increasing productivity by eliminating tedious work by generating some source code instead of writing it manually. You can look through [User Stories](UserStories.md) for its basic ideas.
 
-Punch also plays for Clean as some kind promoter and varnisher - 1) it is an example of direct utilizing Clean's architecture, and 2) it is the first user who gives feedback.
+Punch also plays for Clean as some kind promoter and varnisher - 1) it is an example of direct utilizing Clean's architecture, and 2) it is the first user who gives feedback. And it's a bit tricky, but you can find some explanations of Punch code inside [Clean Readme](https://github.com/nvoynov/clean/blob/master/README.md)
 
 Keep code clean, and happy punching!
 
