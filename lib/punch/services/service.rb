@@ -3,7 +3,7 @@ require 'clean'
 require 'forwardable'
 
 require_relative '../sentries'
-require_relative '../entities'
+require_relative '../values'
 require_relative '../gadgets'
 require_relative '../gateways'
 include Punch::Gateways

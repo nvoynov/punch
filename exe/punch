@@ -12,21 +12,33 @@ LoggerPort.gateway = Logr.new('punch.log')
 
 BANNER = <<~EOF.freeze
 
- - Punch v#{Punch::VERSION} Clean Code Puncher -
- - https://github.com/nvoynov/punch
+  -= Punch v#{Punch::VERSION} Clean Code Puncher =-
+  home https://github.com/nvoynov/punch
+  also https://github.com/nvoynov/clean
 
- Start by
-   1. gem "punch", "~> 0.1.0", git: "https://github.com/nvoynov/punch.git"
-   2. $ punch
+  Start by
+    1. gem "punch", "~> #{Punch::VERSION}", git: "https://github.com/nvoynov/punch.git"
+    2. $ punch
 
- Usage
-   $ punch new PROJECT
-   $ punch init
-   $ punch clone clean
-   $ punch sentry NAME [PARA1 PARA2]
-   $ punch entity NAME [PARA1 PARA2]
-   $ punch service NAME [PARA1 PARA2]
-   $ punch preview sentry|entity|service|gateway
+  Usage
+    $ punch new PROJECT
+    $ punch init
+    $ punch clone clean
+    $ punch entity NAME [PARA1 PARA2]
+    $ punch service NAME [PARA1 PARA2]
+    $ punch preview entity|service NAME [PARA1 PARA2]
+
+  Examples:
+    $ punch preview service core/users/create_user name email
+    $ punch entity user name email
+    $ punch entity user name "email = nil"
+    $ punch entity user "answer = \\"42\\"" name "email = nil"
+    $ punch entity user name: email:
+    $ punch entity user name: "email: nil"
+    $ punch entity user name:string "email:string \\"42\\""
+    $ punch service create_user name email
+    $ punch service core/users/create_user name email
+
 EOF
 
 if ARGV.empty?
@@ -42,7 +54,7 @@ when 'init'  # init punch there
   init
 when 'clone' # punch could be cloning some other than Clean in future
   clone(ARGV.shift)
-when /(sentry|entity|service)/
+when /(entity|service)/
   punch(ARGV.unshift(command))
 when /preview/
   preview(ARGV)

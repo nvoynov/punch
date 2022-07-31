@@ -1,12 +1,12 @@
 <%
 msg = "must be #{@model.name}"
-msg = @model.params[0].name if !!@model.params[0]
+msg = @model.parameters[0].raw if !!@model.parameters[0]
 
 blk = "fail \"UNDER CONSTRUCTION #{@model.const}\""
-blk = @model.params[1].name if !!@model.params[1]
+blk = @model.parameters[1].raw if !!@model.parameters[1]
 
 dsc = "@todo provide description for #{@model.const}"
-dsc = @model.params[2].name if !!@model.params[2]
+dsc = @model.parameters[2].raw if !!@model.parameters[2]
 -%>
 
 # <%= dsc %>

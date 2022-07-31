@@ -4,7 +4,7 @@ require_relative "punch/version"
 require_relative "punch/gadgets"
 require_relative "punch/sentries"
 require_relative "punch/services"
-require_relative "punch/entities"
+require_relative "punch/values"
 require_relative "punch/gateways"
 require_relative "punch/cli"
 

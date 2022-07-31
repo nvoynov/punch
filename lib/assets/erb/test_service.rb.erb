@@ -4,7 +4,7 @@ include <%= @model.namespace %>
 
 describe <%= @model.const %> do
   let(:service) { <%= @model.const %> }
-<% unless @model.params.empty? -%>
+<% if @model.parameters.empty? -%>
   # @todo provide arguments samples
   let(:params) { {<%= parameters_string %>} }
 <% end -%>

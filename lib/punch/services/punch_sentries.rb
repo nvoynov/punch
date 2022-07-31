@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'service'
-include Punch::Entities
+include Punch::Values
 
 module Punch
   module Services

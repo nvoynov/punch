@@ -2,7 +2,7 @@
 
 require_relative 'service'
 require_relative 'punch_sentries'
-include Punch::Entities
+include Punch::Values
 
 module Punch
   module Services
@@ -34,8 +34,8 @@ module Punch
       def sentries_to_punch
         # service call param param1:string param2:integer
         # => ['MustbeString', 'MustbeInteger']
-        model_sentries = @model.params
-          .select{|param| param.kwarg? && param.typed?}
+        model_sentries = @model.parameters
+          .select(&:typed?)
           .map(&:type)
           .uniq
           .map{|type| Decor.new("sentry #{type}")}

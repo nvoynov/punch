@@ -34,7 +34,7 @@ module Punch
     end
 
     def name
-      sanitize(super).split(PATH_SPLITTER).last
+      sanitize(super)
     end
 
     # @return [String] ruby const of Model.name
@@ -43,22 +43,28 @@ module Punch
       constanize(name)
     end
 
-    def space
-      @space ||= begin
-        Punch.config.then do |cfg|
+    def space_config
+      @space_config ||= begin
+        Punch.config.then {|cfg|
           case klass
           when :sentry then cfg.sentries
           when :entity then cfg.entities
           when :service then cfg.services
           else fail "unknown model klass"
           end
-        end
+        }
       end
     end
 
+    def relative_path
+      space_config
+        .then{|str| space.empty? ? str : "#{str}/#{space}"}
+        .then{|str| File.join(str.split(PATH_SPLITTER))}
+    end
+
     def namespace
-      "#{space}/#{@model.name}"
-        .split(PATH_SPLITTER).tap(&:pop)
+      relative_path
+        .split(PATH_SPLITTER)
         .map(&:capitalize)
         .join('::')
     end
@@ -69,16 +75,13 @@ module Punch
     #   space = 'Punch::Services'
     #   Decor.new(model, space).source # => 'lib/punch/services/create_user.rb'
     def source_file
-      "#{space}/#{@model.name}.rb"
-        .split(PATH_SPLITTER)
-        .unshift(Punch.config.lib)
-        .then{|ary| File.join(ary)}
+      File.join(Punch.config.lib, relative_path, name + '.rb')
     end
 
     # return [String] name of require file
     def require_file
-      "#{space}/#{@model.name}"
-        .split(PATH_SPLITTER).tap(&:pop)
+      relative_path
+        .split(PATH_SPLITTER)
         .unshift(Punch.config.lib)
         .then{|ary| ary.push("#{ary.pop}.rb")}
         .then{|ary| File.join(ary)}
@@ -87,9 +90,10 @@ module Punch
     # @return [String] require string 'require_relative services/this_service'
     # @todo check for service users/create_user
     def require_string
-      "#{space}/#{@model.name}"
+      source_file
         .split(PATH_SPLITTER)
         .then{|ary| ary.drop(ary.size - 2)}
+        .then{|ary| ary.push(File.basename(ary.pop, '.*'))}
         .then{|ary| File.join(ary)}
     end
 
@@ -99,11 +103,7 @@ module Punch
     #   space = 'Punch::Services'
     #   Decor.new(model, space).test # => 'test/punch/services/create_user.rb'
     def test_file
-      "#{space}/#{@model.name}.rb"
-        .split(PATH_SPLITTER)
-        .unshift(Punch.config.test)
-        .then{|ary| ary.push("test_#{ary.pop}")}
-        .then{|ary| File.join(ary)}
+      File.join(Punch.config.test, relative_path, "test_#{name}.rb")
     end
 
     protected

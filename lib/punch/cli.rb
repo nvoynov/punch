@@ -54,7 +54,6 @@ module Punch
     def preview(*args)
       # punch(*args) is already wrapped in log_and_rescue!
       PlayboxPort.gateway = Preview.new
-      logger.info { "Playbox changed to preview" }
       logger.info { "preview #{args.join(?\s)}"  }
       punch(*args)
     end
