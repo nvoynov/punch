@@ -4,7 +4,7 @@ require_relative 'entity'
 <% require 'punch/gadgets/erb_helper' -%>
 <%= open_namespace %>
 <%= @spacer %>class <%= @model.const %> < Entity
-<%= define_properties %>
+<%= define_properties -%>
 <%= @spacer %>  def initialize(id: SecureRandom.uuid, <%= parameters_string %>)
 <%= assing_properties -%>
 <%= @spacer %>  end

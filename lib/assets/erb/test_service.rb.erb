@@ -4,21 +4,21 @@ include <%= @model.namespace %>
 
 describe <%= @model.const %> do
   let(:service) { <%= @model.const %> }
-<% if @model.parameters.empty? -%>
+<% if @model.parameters.any? -%>
   # @todo provide arguments samples
   let(:params) { {<%= parameters_string %>} }
 <% end -%>
 
   describe 'failure' do
     it 'must fail' do
-      # assert_raises(ArgumentError) { service.() }
+      assert_raises(ArgumentError) { service.() }
     end
   end
 
   describe 'success' do
     it 'must succeed' do
-      # result = service.(params)
-      # assert result
+      result = service.(params)
+      assert result
     end
   end
 end

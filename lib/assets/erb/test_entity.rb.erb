@@ -3,8 +3,9 @@
 include <%= @model.namespace %>
 
 describe <%= @model.const %> do
-  # let(:entity) { <%= @model.const %>.new(<%= parameters_string %>) }
+  let(:entity) { <%= @model.const %>.new(<%= parameters_string %>) }
 
   it 'must do something' do
+    assert entity
   end
 end

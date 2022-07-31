@@ -5,19 +5,12 @@ include Punch
 
 describe 'exe/punch' do
 
-  SETUP = begin
-    system "gem uninstall punch"
-    system "git add ."
-    system "git commit -m\"test punch exe\""
-    system "rake install"
-  end
-
-  it 'must print banner' do
-    FileBox.() do
-      out, _ = capture_subprocess_io { system "punch" }
-      assert_match Punch::CLI::BANNER, out
-    end
-  end
+  # SETUP = begin
+  #   system "gem uninstall punch"
+  #   system "git add ."
+  #   system "git commit -m\"test punch exe\""
+  #   system "rake install"
+  # end
 
   let(:dummy) { "dummy" }
   it 'must punch dummy' do

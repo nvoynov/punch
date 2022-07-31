@@ -8,7 +8,6 @@ blk = @model.parameters[1].raw if !!@model.parameters[1]
 dsc = "@todo provide description for #{@model.const}"
 dsc = @model.parameters[2].raw if !!@model.parameters[2]
 -%>
-
 # <%= dsc %>
 <%= @model.const %> = Sentry.new(:key, "<%= msg %>"
 ) {|v| <%= blk %> }
