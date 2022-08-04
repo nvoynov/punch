@@ -2,12 +2,16 @@
 
 > Solution does non exists unless tested
 
-- [x] fix sentry const `@items = MustbeOrder_items.(items)` in assign_params_str
-- [?] fix requiring section add ?\n `require_relative 'entities/customer'require_relative 'entities/order'require_relative 'entities/order_item'`
-- [x] fixed `test_sentry.rb.erb`
 - [ ] `<% include Punch::ErbHelper -%>` why this does not work?
 - [ ] content MD5 hashing; a file was "punched" but was it touched after?
 - [ ] `punch stat` prints some "punching" statistic based on MD5 and log
+
+## [0.2.1] - 2022-08-04
+
+- Fixed Param#type_s "MustbeOrder_items"
+- Fixed few "require_relative" sections in single line
+- Changed for Clean v0.3.0
+- Changed Model#define_properties_str for "def_properties"
 
 ## [0.2.0] - 2022-07-31
 
