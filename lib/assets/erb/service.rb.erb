@@ -2,8 +2,7 @@
 require_relative 'service'
 
 <% require 'punch/gadgets/erb_helper' -%>
-<%= open_namespace -%>
-
+<%= open_namespace %>
 <%= @spacer %>class <%= @model.const %> < Service
 <%= @spacer %>  def initialize(<%= parameters_string %>)
 <%= assing_properties -%>

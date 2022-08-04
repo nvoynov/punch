@@ -30,7 +30,12 @@ module Punch
       end
 
       def define_properties_str
-        parameters.map(&:reader_s).join(?\n) + ?\n
+        return ?\n unless parameters.any?
+        keys = parameters.map{|para| ":#{para.name}"}.join(', ')
+        parameters
+          .map(&:reader_s)
+          .push("def_properties #{keys}")
+          .join(?\n) + ?\n
       end
 
       protected

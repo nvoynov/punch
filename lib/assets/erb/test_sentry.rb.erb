@@ -9,11 +9,11 @@ describe <%= @model.const %> do
   let(:wrong) { [nil, -1, 0, 1, "", "string", Object.new] }
 
   it 'must accept valid values' do
-    valid.each{|val| <%= @model.const %>.(v)}
+    valid.each{|val| <%= @model.const %>.(val)}
   end
 
   it 'must fail for wrong values' do
-    wrong.each{|val| assert_raises(ArgumentError) { <%= @model.const %>.(v) }}
+    wrong.each{|val| assert_raises(ArgumentError) { <%= @model.const %>.(val) }}
   end
 
 end

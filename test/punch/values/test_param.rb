@@ -2,6 +2,14 @@ require_relative '../../test_helper'
 include Punch::Values
 
 describe Param do
+  it 'must type_s' do
+    para = Param.new('param')
+    assert 'Object', para.type_s
+
+    para = Param.new('param:zero_or_more')
+    assert 'ZeroOrMore', para.type_s
+  end
+
   it 'must compare through <=>' do
     pos = Param.new('param')
     pos_default = Param.new('param = nil')
@@ -27,7 +35,7 @@ describe Param do
     assert_equal 'Object', dummy.type_s
     assert_equal raw, dummy.define_s
     assert_equal "@#{raw} = #{raw}", dummy.assign_s
-    assert_equal "# @param param [Object]\nattr_reader :param\n", dummy.reader_s
+    assert_equal "# @param param [Object]", dummy.reader_s
   end
 
   it 'must present positional param with default value' do
@@ -41,7 +49,7 @@ describe Param do
     assert_equal 'Object', dummy.type_s
     assert_equal raw, dummy.define_s
     assert_equal "@param = param", dummy.assign_s
-    assert_equal "# @param param [Object]\nattr_reader :param\n", dummy.reader_s
+    assert_equal "# @param param [Object]", dummy.reader_s
   end
 
   it 'must present keyword param' do
@@ -55,7 +63,7 @@ describe Param do
     assert_equal 'Object', dummy.type_s
     assert_equal raw, dummy.define_s
     assert_equal "@param = param", dummy.assign_s
-    assert_equal "# @param param [Object]\nattr_reader :param\n", dummy.reader_s
+    assert_equal "# @param param [Object]", dummy.reader_s
   end
 
   it 'must present keyword param with type' do
@@ -68,7 +76,7 @@ describe Param do
     assert_equal 'String', dummy.type_s
     assert_equal 'param:', dummy.define_s
     assert_equal "@param = MustbeString.(param)", dummy.assign_s
-    assert_equal "# @param param [String]\nattr_reader :param\n", dummy.reader_s
+    assert_equal "# @param param [String]", dummy.reader_s
   end
 
   it 'must present keyword param with type and default value' do
@@ -81,6 +89,6 @@ describe Param do
     assert_equal 'String', dummy.type_s
     assert_equal "param: ''", dummy.define_s
     assert_equal "@param = MustbeString.(param)", dummy.assign_s
-    assert_equal "# @param param [String]\nattr_reader :param\n", dummy.reader_s
+    assert_equal "# @param param [String]", dummy.reader_s
   end
 end

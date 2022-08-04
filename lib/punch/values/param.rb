@@ -59,7 +59,12 @@ module Punch
       end
 
       def type_s
-        typed? ? type.capitalize : "Object"
+        return "Object" unless typed?
+        type.downcase.strip
+           .gsub(/\s{1,}/, '_')
+           .split(?_)
+           .map(&:capitalize)
+           .join
       end
 
       def define_s
@@ -80,10 +85,7 @@ module Punch
       end
 
       def reader_s
-        <<~EOF
-          # @param #{name} [#{type_s}]
-          attr_reader :#{name}
-        EOF
+        "# @param #{name} [#{type_s}]"        
       end
     end
 
