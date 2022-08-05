@@ -94,7 +94,7 @@ module Punch
           # include
           klass_require = read_require_file(model)
           unless klass_require.match(model.require_string)
-            klass_require += "\nrequire_relative '#{model.require_string}'"
+            klass_require += "require_relative '#{model.require_string}'\n"
             log << write(model.require_file, klass_require)
           end
           log << write(model.test_file, test_code)

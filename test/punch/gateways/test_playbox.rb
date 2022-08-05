@@ -151,6 +151,25 @@ describe Playbox do
         assert_equal 4, log.size # code, file, require~, require
       end
     end
+
+    let(:create)  { Punch::Decor.new('service create') }
+    let(:update) { Punch::Decor.new('service update') }
+    it 'must write require_file properly' do
+      Sandbox.() do
+        playbox.punch(create, 'dummy', 'dummy')
+        model = "require_relative 'services/create'\n"
+        probe = playbox.read_require_file(create)
+        assert_equal model, probe
+
+        playbox.punch(update, 'dummy', 'dummy')
+        model = <<~EOF
+          require_relative 'services/create'
+          require_relative 'services/update'
+        EOF
+        probe = playbox.read_require_file(create)
+        assert_equal model, probe
+      end
+    end
   end
 
 
