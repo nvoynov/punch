@@ -15,12 +15,18 @@ module Punch
     #   param = Param.new('param:type')
     #   param = Param.new('param:type nil')
     #
-    Param = Value.punch(:raw, :name, :keyword, :type, :tail) do
+    class Param
+      attr_reader :raw, :name, :keyword, :type, :tail
+
       def initialize(raw)
         name, *tail = raw.split(?\s)
         kwar = name.include?(?:)
         name, type = name.split(?:)
-        super(raw: raw, name: name, keyword: kwar, type: type, tail: tail.join(?\s))
+        @raw = raw
+        @name = name
+        @keyword = kwar
+        @type = type
+        @tail = tail.join(?\s)
       end
 
       def <=>(another)
@@ -85,7 +91,10 @@ module Punch
       end
 
       def reader_s
-        "# @param #{name} [#{type_s}]"        
+        <<~EOF
+          # @param #{name} [#{type_s}]
+          attr_reader :#{name}
+        EOF
       end
     end
 

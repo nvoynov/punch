@@ -54,11 +54,20 @@ describe Model do
     dummy = Model.new(*['domain/model', 'a', 'b = nil', 'c:', 'd:string', 'e:string "42"'])
     sample = <<~EOF
       # @param a [Object]
+      attr_reader :a
+
       # @param b [Object]
+      attr_reader :b
+
       # @param c [Object]
+      attr_reader :c
+
       # @param d [String]
+      attr_reader :d
+
       # @param e [String]
-      def_properties :a, :b, :c, :d, :e
+      attr_reader :e
+      
     EOF
     assert_equal sample, dummy.define_properties_str
   end

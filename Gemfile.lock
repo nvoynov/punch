@@ -1,13 +1,13 @@
 GIT
   remote: https://github.com/nvoynov/clean.git
-  revision: f9ff710733b9edbcf993a13ced1c066c64851a9e
+  revision: 95c614b13a25ec63b7f36f2683df84444b400162
   specs:
-    clean (0.3.1)
+    clean (0.4.0)
 
 PATH
   remote: .
   specs:
-    punch (0.2.2)
+    punch (0.3.0)
 
 GEM
   remote: https://rubygems.org/
@@ -20,7 +20,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  clean (~> 0.3.1)!
+  clean (~> 0.4.0)!
   minitest (~> 5.0)
   punch!
   rake (~> 13.0)

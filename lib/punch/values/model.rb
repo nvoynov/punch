@@ -7,14 +7,19 @@ module Punch
   module Values
 
     # Model Value stands for a concept with parameters
-    Model = Value.punch(:name, :space, :parameters) do
+    class Model
+      attr_reader :name, :space, :parameters
+
       def initialize(*args)
         fail ArgumentError, "required at least one argument \"name\"" unless args.any?
         name = args.shift
         name, space = name.split(%r{[\/\\]})
           .then{|ary| [ary.pop, ary.join(?/)]}
         para = args.map{|arg| Param.new(arg)}
-        super(name: name, space: space, parameters: para)
+
+        @name = name
+        @space = space
+        @parameters = para
       end
 
       def define_params_str
@@ -31,10 +36,8 @@ module Punch
 
       def define_properties_str
         return ?\n unless parameters.any?
-        keys = parameters.map{|para| ":#{para.name}"}.join(', ')
         parameters
           .map(&:reader_s)
-          .push("def_properties #{keys}")
           .join(?\n) + ?\n
       end
 
