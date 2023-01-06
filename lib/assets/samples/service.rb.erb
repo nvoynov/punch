@@ -1,0 +1,36 @@
+<%
+  @spacer = ' ' * (@model.namespace.split(/::/).size - 1)
+
+  def with_spacer(strings, plus = '')
+    strings.lines.map{"#{@spacer}#{plus}#{_1}"}.join
+  end
+
+  def properties
+    with_spacer(@model.properties, '    ')
+  end
+
+  def assignment
+    with_spacer(@model.assignment, '      ')
+  end
+-%>
+# frozen_string_literal: true
+require_relative 'service'
+
+<%= @model.open_namespace %>
+<%= @spacer %>  # <%= @model.desc %>
+<%= @spacer %>  class <%= @model.const %> < Service
+
+<%= @spacer %>    def initialize(<%= @model.parameters %>)
+<%= assignment %>
+<%= @spacer %>    end
+
+<%= @spacer %>    def call
+<%= @spacer %>      # user = storage.get(User, email: @email)
+<%= @spacer %>      # fail Failure, "Email already exists" if user
+<%= @spacer %>      # user = User.new(<%= @model.arguments %>)
+<%= @spacer %>      # storage.put(user)
+<%= @spacer %>      fail Failure, 'UNDER CONSTRUCTION'
+<%= @spacer %>    end
+<%= @spacer %>  end
+
+<%= @model.close_namespace %>

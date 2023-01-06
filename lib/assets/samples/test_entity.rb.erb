@@ -1,0 +1,10 @@
+require_relative "<%= @model.test_helper %>"
+include <%= @model.namespace %>
+
+describe <%= @model.const %> do
+  let(:entity) { <%= @model.const %>.new(<%= @model.parameters %>) }
+
+  it 'must do something' do
+    assert entity
+  end
+end

@@ -1,0 +1,6 @@
+--- !ruby/struct:Punch::Config
+lib: lib
+test: test
+sentries: sentries
+entities: entities
+services: services

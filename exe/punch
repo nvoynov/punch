@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "punch/cli"
+include Punch
+
+if ARGV.empty?
+  CLI.banner
+  exit
+end
+
+command = ARGV.shift.downcase
+case command
+when 'new'   # create new punched
+  CLI.folder(ARGV.shift)
+when /(entity|e|service|s)/
+  CLI.source(ARGV.unshift(command))
+when 'status'
+  CLI.status
+when /domain/
+  CLI.domain
+when /preview/ # for entities and services only
+  CLI.preview(ARGV)
+else
+  puts "Sorry, didn't get you"
+  CLI.banner
+end
