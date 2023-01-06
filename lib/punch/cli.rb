@@ -28,6 +28,8 @@ module Punch
     #
     # I can't see any sense to punch just sentry there
     def source(*args)
+      pp args
+      pp ARGV
       return unless playbox.punch_home?
 
       klass = args.shift.downcase.to_sym
@@ -128,25 +130,32 @@ module Punch
       ~ Punch v#{Punch::VERSION} ~ Code Generator
       https://github.com/nvoynov/punch
 
-      Usage
+      Usage:
 
-        $ punch new PROJECT -v
-        $ punch entity NAME [PARA1 PARA2]
-        $ punch service NAME [PARA1 PARA2]
-        $ punch domain NAME
-        $ punch preview entity|service NAME [PARA1 PARA2]
+        punch new|n DIRECTORY [OPTIONS]    Create a new Punch project
+          -e, --editor EDITOR              Open the project in EDITOR
 
-      Samples
+        punch entity|e NAME [PARAM..]      Punch new entity concept
+          PARAM: name[:][sentry][default]  zero or more parameters
 
-        $ punch preview service core/users/create_user name email
-        $ punch preview entity user name email
-        $ punch preview entity user name "email = nil"
-        $ punch preview entity user "answer = \\"42\\"" name "email = nil"
-        $ punch preview entity user name: email:
-        $ punch preview entity user name: "email: nil"
-        $ punch preview entity user name:string "email:string \\"42\\""
-        $ punch preview service create_user name email
-        $ punch preview service core/users/create_user name email
+        punch service|s NAME [PARAM..]     Punch new service concept
+          PARAM: name[:][sentry][default]  zero or more parameters
+
+        punch preview COMMAND              Preview generation result
+          entity|e NAME [PARAM..]          command to preview...
+          service|s NAME [PARAM..]
+
+        punch status                       Print Punch Project status
+
+        punch domain                       Copy domain DSL example
+
+      Feel free to run a few preview before start punching:
+
+        $ punch preview service signup name email
+        $ punch preview service user/signup name "email pa$$w0rd"
+        $ punch preview service user/signup name: email:
+        $ punch preview service user/signin login:email secret:secret
+        $ punch preview service user/signin login:email "secret:secret "pa$$w0rd""
     EOF
 
     MOTTO = "Keep code clean, and happy punching!".freeze

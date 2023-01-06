@@ -1,3 +1,8 @@
+PATH
+  remote: .
+  specs:
+    punch (0.5.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -8,8 +13,9 @@ PLATFORMS
   x64-mingw32
 
 DEPENDENCIES
-  minitest
-  rake
+  minitest (~> 5.0)
+  punch!
+  rake (~> 13.0)
 
 BUNDLED WITH
    2.4.1

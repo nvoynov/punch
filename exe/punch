@@ -9,18 +9,20 @@ if ARGV.empty?
   exit
 end
 
-command = ARGV.shift.downcase
+command = ARGV.shift
+command.downcase
+
 case command
-when 'new'   # create new punched
+when /(new|n)/   # create new punched
   CLI.folder(ARGV.shift)
 when /(entity|e|service|s)/
-  CLI.source(ARGV.unshift(command))
+  CLI.source(*ARGV.unshift(command))
 when 'status'
   CLI.status
 when /domain/
   CLI.domain
 when /preview/ # for entities and services only
-  CLI.preview(ARGV)
+  CLI.preview(*ARGV)
 else
   puts "Sorry, didn't get you"
   CLI.banner

@@ -11,19 +11,4 @@ require_relative "punch/cli"
 
 module Punch
 
-  # class << self
-  #
-  #   def root
-  #     File.dirname __dir__
-  #   end
-  #
-  #   def self.assets
-  #     File.join(root, 'lib', 'assets')
-  #   end
-  #
-  #   def self.sources
-  #     File.join(root, 'lib', 'punch')
-  #   end
-  # end
-
 end
