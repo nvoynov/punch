@@ -22,6 +22,58 @@ module Punch
       File.exist?(Punch::CONFIG)
     end
 
+    DOMAIN  = 'domain'.freeze
+    BASICS  = 'basics'.freeze
+    SAMPLES = '.punch'.freeze
+
+    def home_basics?
+      Dir.exist?(File.join('lib', BASICS))
+    end
+
+    # copies punch/basic sources into home
+    #   lib/basics/sentry.rb
+    #   lib/basics/entity.rb
+    #   lib/basics/service.rb
+    #   lib/basics/plugin.rb
+    #   lib/basics.rb
+    # @return [Array<String>] with sources copied
+    def punch_basics
+      return if home_basics?
+      basics = File.join('lib', BASICS)
+      makedirs(basics)
+      cp_r "#{Punch.basics}/.", basics
+      sources = Dir.glob("#{basics}/*.rb")
+      punchrb = sources.map{|s|
+        "require_relative \"#{BASICS}/#{File.basename(s)}\""
+      }.join(?\n)
+      File.write("lib/#{BASICS}.rb", punchrb)
+      sources << "lib/#{BASICS}.rb"
+    end
+
+    def home_samples?
+      Dir.exist?(SAMPLES)
+    end
+
+    # copies punch/basic
+    # @return [Array<String>] with sources copied
+    def punch_samples
+      return if home_samples?
+      mkdir(SAMPLES)
+      cp_r "#{Punch.samples}/.", SAMPLES
+      Dir.glob("#{SAMPLES}/**/*")
+    end
+
+    def home_domain?
+      Dir.exist?(DOMAIN)
+    end
+
+    def punch_domain
+      return if home_domain?
+      mkdir(DOMAIN)
+      cp_r "#{Punch.domain}/.", DOMAIN
+      Dir.glob("#{DOMAIN}/**/*")
+    end
+
     def exist?(filename)
       File.exist?(filename)
     end
@@ -75,58 +127,17 @@ module Punch
       end
     end
 
-    DOMAIN  = 'domain'.freeze
-    BASICS  = 'basics'.freeze
-    SAMPLES = '.punch_samples'.freeze
-
-    # copies punch/basic sources into home
-    #   lib/punch/sentry.rb
-    #   lib/punch/entity.rb
-    #   lib/punch/service.rb
-    #   lib/punch/pluggable.rb
-    #   lib/punch.rb
-    #
-    # @return [Array<String>] with sources copied
-    def punch_basics
-      basics = File.join('lib', BASICS)
-      return if Dir.exist?(basics)
-      makedirs(basics)
-      cp_r "#{Punch.basics}/.", basics
-      sources = Dir.glob("#{basics}/*.rb")
-      punchrb = sources.map{|s|
-        "require_relative \"#{BASICS}/#{File.basename(s)}\""
-      }.join(?\n)
-      File.write("lib/#{BASICS}.rb", punchrb)
-      sources << "lib/#{BASICS}.rb"
-    end
-
-    # copies punch/basic
-    # @return [Array<String>] with sources copied
-    def punch_samples
-      return if Dir.exist?(SAMPLES)
-      mkdir(SAMPLES)
-      cp_r "#{Punch.samples}/.", SAMPLES
-      Dir.glob("#{SAMPLES}/**/*")
-    end
-
-    def punch_domain
-      return if Dir.exist?(DOMAIN)
-      mkdir(DOMAIN)
-      cp_r "#{Punch.domain}/.", DOMAIN
-      Dir.glob("#{DOMAIN}/**/*")
-    end
-
     # @param model [Symbol]
     # @return [Array<String>] array of two samples, where the first for source and the second for test
     def samples(model)
-      punch_samples unless Dir.exist?(SAMPLES)
       payload = case model
         when :sentry;  ['sentry.rb.erb', 'test_sentry.rb.erb']
         when :entity;  ['entity.rb.erb', 'test_entity.rb.erb']
         when :service; ['service.rb.erb', 'test_service.rb.erb']
         else fail ArgumentError, "Unknown model"
         end
-      payload.map{|s| File.read(File.join(SAMPLES, s))}
+      dir = home_samples? ? SAMPLES : Punch.samples
+      payload.map{|s| File.read(File.join(dir, s))}
     end
 
     protected

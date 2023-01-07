@@ -38,6 +38,7 @@ module Punch
     module Holder
       def plugin(klass)
         @klass = klass
+        @object = nil
       end
 
       def object

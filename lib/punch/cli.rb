@@ -2,8 +2,10 @@
 
 require_relative "model"
 require_relative "plugins"
+require_relative "services"
 require_relative "version"
 require "forwardable"
+include Punch::Services
 
 module Punch
   module CLI
@@ -28,9 +30,7 @@ module Punch
     #
     # I can't see any sense to punch just sentry there
     def source(*args)
-      pp args
-      pp ARGV
-      return unless playbox.punch_home?
+      return unless punch_home?
 
       klass = args.shift.downcase.to_sym
       unless %i[entity service].include?(klass)
@@ -41,8 +41,32 @@ module Punch
       secure_call {
         logger.info { "punch #{args.join(?\s)}" }
         model = ModelBuilder.(*args)
-        Services::PunchSource.(klass, model)
+        PunchSource.(klass, model)
       }
+    end
+
+    # copy punch/basics into project
+    def basics
+      return unless punch_home?
+      if playbox.home_basics?
+        puts "The basics copied already!"
+        puts "Find it in 'lib/#{Playbox::BASICS}'"
+        return
+      end
+      logger.info { 'punch basics' }
+      secure_call { playbox.punch_basics }
+    end
+
+    # copy punch samples into project
+    def samples
+      return unless punch_home?
+      if playbox.home_samples?
+        puts "The directory copied already!"
+        puts "Find it in '#{Playbox::SAMPLES}'"
+        return
+      end
+      logger.info { 'punch samples' }
+      secure_call { playbox.punch_samples }
     end
 
     # preview the result of the punch
@@ -54,9 +78,10 @@ module Punch
     end
 
     def domain
-      return unless playbox.punch_home?
-      if Dir.exist? Playbox::DOMAIN
-        puts "\"#{Playbox::DOMAIN}\" directory exist already"
+      return unless punch_home?
+      if playbox.home_domain?
+        puts "The directory copied already!"
+        puts "Find it in '#{Playbox::DOMAIN}'"
         return
       end
       secure_call {
@@ -68,7 +93,7 @@ module Punch
     # report project status
     def status
       return unless punch_home?
-      puts Services::ReportStatus.()
+      puts ReportStatus.()
     end
 
     def banner
@@ -132,13 +157,12 @@ module Punch
 
       Usage:
 
-        punch new|n DIRECTORY [OPTIONS]    Create a new Punch project
-          -e, --editor EDITOR              Open the project in EDITOR
+        punch new DIRECTORY                Create a new Punch project
 
-        punch entity|e NAME [PARAM..]      Punch new entity concept
+        punch entity NAME [PARAM..]        Punch new entity concept
           PARAM: name[:][sentry][default]  zero or more parameters
 
-        punch service|s NAME [PARAM..]     Punch new service concept
+        punch service NAME [PARAM..]       Punch new service concept
           PARAM: name[:][sentry][default]  zero or more parameters
 
         punch preview COMMAND              Preview generation result
@@ -146,16 +170,17 @@ module Punch
           service|s NAME [PARAM..]
 
         punch status                       Print Punch Project status
-
+        punch samples                      Copy templates for customization
+        punch basics                       Copy basic classes
         punch domain                       Copy domain DSL example
 
       Feel free to run a few preview before start punching:
 
         $ punch preview service signup name email
-        $ punch preview service user/signup name "email pa$$w0rd"
+        $ punch preview service user/signup "name 'user'" email
         $ punch preview service user/signup name: email:
         $ punch preview service user/signin login:email secret:secret
-        $ punch preview service user/signin login:email "secret:secret "pa$$w0rd""
+        $ punch preview service user/signin login:email "secret:secret 'pa$$w0rd'"
     EOF
 
     MOTTO = "Keep code clean, and happy punching!".freeze

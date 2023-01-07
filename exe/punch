@@ -2,7 +2,10 @@
 
 require "bundler/setup"
 require "punch/cli"
+require "punch/plugins"
 include Punch
+
+LoggerPlug.object = Punch::Logger.new('punch.log')
 
 if ARGV.empty?
   CLI.banner
@@ -12,17 +15,24 @@ end
 command = ARGV.shift
 command.downcase
 
+puts "punch cmnd: #{command}"
+puts "punch ARGV: #{ARGV}"
+
 case command
-when /(new|n)/   # create new punched
+when /new/   # create new punched
   CLI.folder(ARGV.shift)
-when /(entity|e|service|s)/
+when /(entity|service)/
   CLI.source(*ARGV.unshift(command))
-when 'status'
-  CLI.status
-when /domain/
-  CLI.domain
 when /preview/ # for entities and services only
   CLI.preview(*ARGV)
+when /basics/
+  CLI.basics
+when /samples/
+  CLI.samples
+when /domain/
+  CLI.domain
+when 'status'
+  CLI.status
 else
   puts "Sorry, didn't get you"
   CLI.banner
