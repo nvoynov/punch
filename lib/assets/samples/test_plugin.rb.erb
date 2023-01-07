@@ -1,0 +1,11 @@
+require_relative "<%= @model.test_helper %>"
+include <%= @model.namespace %>
+
+class Test<%= @model.const %> < Minitest::Test
+  def plugin
+    <%= @model.const %>.new(@model.arguments)
+  end
+
+  def test_something
+  end
+end

@@ -12,7 +12,7 @@ module Punch
     ) {|v| v.is_a?(Array) && v.any? && v.all?{|i| i.is_a?(Punch::Model)} }
 
     MustbeKlassDecor = Sentry.new(:args0, 'must be :sentry|:entity|:service'
-    ) {|v| v.is_a?(Symbol) && %i(sentry entity service).any?{|s| s == v} }
+    ) {|v| v.is_a?(Symbol) && %i(sentry entity service plugin).any?{|s| s == v} }
 
     # Punches bunch of models from *args
     #
@@ -78,7 +78,7 @@ module Punch
         required = ''
         required = storage.read(model.require) if storage.exist?(model.require)
         requires = "require_relative \"#{model.require_string}\""
-        return if required =~ %r{requires}
+        return if required =~ %r{#{requires}}
         storage.append(model.require, requires)
         @log << model.require + '~'
       end

@@ -14,11 +14,11 @@ So when you see yourself in a situation with at least dozen of entities / servic
 
 Punch has started from just a few following stories that I hope clearly translate its premises and will still be relevant as the project goes further.
 
-> __Architecture__ I want to design my code base in accord with The Clean Architecture principles, so it will be easy to write, read, test, and evolve.
->
-> __Business logic__ I want to start as small as possible just with PORO business logic by adopting just a few core concepts (Service, Entity, Plugin) so that I will have a clean domain at the beginning. When my business logic is ready I'll get to particular technologies (CLI, Web, API, Message Broker, Storage, external API, etc.)
->
-> __Generators__ I want to have a few generators for my basic concepts (entities, services), that way I hope to boost my productivity and reduce mistakes through generating instead of writing manually.
+**Architecture** I want to design my code base in accord with The Clean Architecture principles, so it will be easy to write, read, test, and evolve.
+
+**Business logic** I want to start as small as possible just with PORO business logic by adopting just a few core concepts (Service, Entity, Plugin) so that I will have a clean domain at the beginning. When my business logic is ready I'll get to particular technologies (CLI, Web, API, Message Broker, Storage, external API, etc.)
+
+**Generators** I want to have a few generators for my basic concepts (entities, services), that way I hope to boost my productivity and reduce mistakes through generating instead of writing manually.
 
 ## Installation
 
@@ -59,6 +59,8 @@ services: core/usecases
 ```
 
 Punch will generate code inside `lib/domain` and tests inside `test/domain` folders, and besides, sentries will be placed into `app/domain/core/sentries.rb`, services into `app/domain/core/usecases`, entities into `app/domain/core/entities`.
+
+Although Punch is not about data store, punching ActiveRecord or Sequel model will be easy enough, you might just configure `entities: models` and provide your own templates (see [templates](#templates) section.)
 
 ### Punch::Sentry
 
@@ -156,7 +158,13 @@ module Entities
 end
 ```
 
+### "punch plugin"
+
+The `punch plugin NAME` command will "punch" Plugin, the command behavior is similar to `punch service/entity`.
+
 ### "punch preview"
+
+The `punch preview` command prints the generated code instead of write so you can preview before you punch.
 
 ### "punch status"
 
@@ -194,7 +202,7 @@ dogen.rb
 
 Having the `sample.rb` domain as an example, you can express your domain through Punch::DSL and then generate it with `dogen.rb`.
 
-It seems very promising at the moment, and besides the domain code generation it might serve for help generation, SRS, microservices, or whatever you could generate from the domain described in sentries (domain, type), entities, users, and services.
+It seems very promising at the moment when besides the code generation you could generate help files,  SRS, interfaces, or whatever you could generate from the domain described in sentries (domain, type), entities, users, and services.
 
 ```ruby
 DSL::Builder.build('Sample Users Domain') do
@@ -246,6 +254,12 @@ DSL::Builder.build('Sample Users Domain') do
   end
 end
 ```
+
+## What's next?
+
+The next step will be to design a sample User Domain for authorization and authentication and polishing Punch in tranches. Another question I want to answer there how many code will be written manually vs "punched" code. Punch domain and measure SLOC, develop business logic and measure SLOC.
+
+Then maybe design some extra code for basic storage and service adapters for dRuby and Rack.
 
 ## Development
 

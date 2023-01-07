@@ -33,6 +33,11 @@ class TestCLI < Minitest::Test
       CLI.source(*%w[service signin])
       puts "> proper service with sentry"
       CLI.source('service', 'create_order', 'customer_id:uuid')
+
+      puts "> proper plugin"
+      CLI.source(*%w[plugin storage])
+
+
       print_dir_glob
     }
   end

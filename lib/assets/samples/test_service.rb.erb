@@ -3,12 +3,10 @@ include <%= @model.namespace %>
 
 describe <%= @model.const %> do
   let(:service) { <%= @model.const %> }
-  # let(:storage) { StoragePlug.plugged }
-  # let(:payload) { <%= @model.arguments %> }
+  let(:payload) { [<%= @model.arguments %>] }
 
   it 'must #call' do
-    assert service.()
-    # assert service.(*payload)
+    assert service.(*payload)
     # storage.stub :get, Object.new do
     #   service.(*payload)
     # end

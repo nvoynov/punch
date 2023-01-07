@@ -14,6 +14,8 @@ module Punch
         SourceDecor.new(conf.lib, conf.test, conf.entities, model)
       when :service
         SourceDecor.new(conf.lib, conf.test, conf.services, model)
+      when :plugin
+        SourceDecor.new(conf.lib, conf.test, conf.plugins, model)
       else
         fail "Unknown klass for decoration"
       end

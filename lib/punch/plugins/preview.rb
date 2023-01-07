@@ -24,9 +24,7 @@ module Punch
       end
 
       preview = <<~EOF
-        \n# #{'-' * name.size}
-        # #{name}
-        # #{'-' * name.size}\n
+        \n>> create a new source #{name}
         #{excerpt(string) + string}
       EOF
       puts preview
@@ -35,11 +33,8 @@ module Punch
 
     def append(name, string)
       preview = <<~EOF
-        \n# #{'-' * name.size}
-        # #{name}
-        # #{'-' * name.size}\n
-        # append string to the file
-        #{excerpt(string) + string}
+        \n>> append content #{name}
+        #{string}
       EOF
       puts preview
     end

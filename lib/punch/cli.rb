@@ -33,7 +33,7 @@ module Punch
       return unless punch_home?
 
       klass = args.shift.downcase.to_sym
-      unless %i[entity service].include?(klass)
+      unless %i[entity service plugin].include?(klass)
         puts "required 'entity' or 'service'"
         return
       end
@@ -163,6 +163,9 @@ module Punch
           PARAM: name[:][sentry][default]  zero or more parameters
 
         punch service NAME [PARAM..]       Punch new service concept
+          PARAM: name[:][sentry][default]  zero or more parameters
+
+        punch plugin NAME [PARAM..]        Punch new plugin concept
           PARAM: name[:][sentry][default]  zero or more parameters
 
         punch preview COMMAND              Preview generation result

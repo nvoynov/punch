@@ -134,6 +134,7 @@ module Punch
         when :sentry;  ['sentry.rb.erb', 'test_sentry.rb.erb']
         when :entity;  ['entity.rb.erb', 'test_entity.rb.erb']
         when :service; ['service.rb.erb', 'test_service.rb.erb']
+        when :plugin;  ['plugin.rb.erb', 'test_plugin.rb.erb']
         else fail ArgumentError, "Unknown model"
         end
       dir = home_samples? ? SAMPLES : Punch.samples
