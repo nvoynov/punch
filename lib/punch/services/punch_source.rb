@@ -11,7 +11,7 @@ module Punch
     MustbeModelArray = Sentry.new(:args, 'must be Array<Punch::Model>'
     ) {|v| v.is_a?(Array) && v.any? && v.all?{|i| i.is_a?(Punch::Model)} }
 
-    MustbeKlassDecor = Sentry.new(:args0, 'must be :sentry|:entity|:service'
+    MustbeKlassDecor = Sentry.new(:args0, 'must be :sentry|:entity|:service|:plugin'
     ) {|v| v.is_a?(Symbol) && %i(sentry entity service plugin).any?{|s| s == v} }
 
     # Punches bunch of models from *args

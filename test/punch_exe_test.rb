@@ -10,15 +10,15 @@ describe 'exe/punch' do
   #   }
   # end
 
-  it 'must punch and preview services and entities' do
-    punched_bundled {
-      system "punch service sign_up email secret"
-      system "punch service sign_in email secret"
-      system "punch plugin storage"
-      system "punch preview service sign_in email secret"
-      system "punch status"
-    }
-  end
+  # it 'must punch and preview services and entities' do
+  #   punched_bundled {
+  #     system "punch service sign_up email secret"
+  #     system "punch service sign_in email secret"
+  #     system "punch plugin storage"
+  #     system "punch preview service sign_in email secret"
+  #     system "punch status"
+  #   }
+  # end
 
   # it 'must abort punching changed sources' do
   #   punched_bundled {
@@ -33,6 +33,34 @@ describe 'exe/punch' do
   #     assert_match %{#{name}!}, out
   #   }
   # end
+
+  # it 'must punch in bundled directory' do
+  #   bundled {
+  #     system "punch service sign_up email secret"
+  #   }
+  # end
+
+  it 'must punch domain by dogen' do
+    bundled {
+      system "punch domain"
+      system "ruby domain/dogen.rb"
+    }
+  end
+
+  def bundled
+    path = File.dirname(__dir__)
+    body = <<~EOF
+      source "https://rubygems.org"
+      gem "punch", path: "#{path}"
+    EOF
+
+    Tempbox.() {
+      File.write('Gemfile', body)
+      system "bundle install"
+      # system "bundle show punch"
+      yield if block_given?
+    }
+  end
 
   def punched_bundled
     path = File.dirname(__dir__)

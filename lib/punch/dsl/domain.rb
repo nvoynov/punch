@@ -27,8 +27,6 @@ module Punch
     end
 
     class Actor < Punch::Basic
-      attr_reader :services
-
       def initialize(name, desc = '')
         super(name, desc)
         @services = {}
@@ -40,22 +38,25 @@ module Punch
       end
 
       def service(name, desc = '', &block)
-        service = Service.new(name, desc)
+        service = Service.new("#{@name}/#{name}", desc)
         service.instance_eval(&block) if block
         self.<<(service)
+      end
+
+      def services
+        @services.values
       end
 
     end
 
     class Domain < Punch::Basic
-      attr_reader :sentries
-      attr_reader :entities
-      attr_reader :actors
 
       def initialize(name, desc = '')
         super(name, desc)
+        # Hash<name, object> to ensure uniq names
         @sentries = {}
         @entities = {}
+        @services = {}
         @actors = {}
       end
 
@@ -70,6 +71,27 @@ module Punch
       def add_actor(actor)
         @actors[actor.name] = actor
       end
+
+      def add_service(service)
+        @services[service.name] = service
+      end
+
+      def sentries
+        @sentries.values
+      end
+
+      def entities
+        @entities.values
+      end
+
+      def services
+        @services.values
+      end
+
+      def actors
+        @actors.values
+      end
+
     end
 
   end

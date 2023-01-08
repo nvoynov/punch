@@ -4,9 +4,8 @@ require "punch/dsl"
 include Punch
 
 # @return [Punch::DSL::Domain]
-def build_domain
-  DSL::Builder.build('Sample Users Domain') do
-
+def build_sample_domain
+  DSL::Builder.build do
     sentry :string, block: 'v.is_a?(Strinig)'
     sentry :email,  'must be valid email address'
     sentry :secret, 'at least 8 symbols with digits'

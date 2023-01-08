@@ -4,3 +4,4 @@ test: test
 sentries: sentries
 entities: entities
 services: services
+plugins: plugins

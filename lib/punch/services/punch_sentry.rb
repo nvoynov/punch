@@ -17,6 +17,7 @@ module Punch
 
       def call
         MustbeSentryArray.(@args)
+
         @log, @buffer = [], []
         @source, @test = storage.samples(:sentry)
         @args.map{|m| decorator(m) }
@@ -24,18 +25,19 @@ module Punch
           .each  {|d| punch(d)}
         return [] if @buffer.empty? # nothing was punched
 
-        storage.append(@sentries_source, @buffer.join(?\n) )
-        @log.unshift @sentries_source
+        storage.append(sentriesrb, @buffer.join(?\n) )
+        @log.unshift sentriesrb
       end
+
+      def sentriesrb
+        @sentriesrb ||= File.join(config.lib, config.sentries + '.rb')
+      end
+
 
       protected
 
       def decorator(model)
         Factory.decorate(:sentry, model)
-      end
-
-      def sentries_source
-        @sentries_source ||= File.join(config.lib, config.sentries + '.rb')
       end
 
       def punch(model)
@@ -59,10 +61,10 @@ module Punch
 
       def declared
         @declared ||= begin
-          sentries = if storage.exist?(sentries_source)
-            storage.read(sentries_source)
+          sentries = if storage.exist?(sentriesrb)
+            storage.read(sentriesrb)
           else
-            storage.append(sentries_source, SENTRIES)
+            storage.append(sentriesrb, SENTRIES)
             SENTRIES
           end
           sentries.lines

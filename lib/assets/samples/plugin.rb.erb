@@ -1,28 +1,14 @@
-<%
-  @spacer = ' ' * (@model.namespace.split(/::/).size - 1)
-
-  def with_spacer(strings, plus = '')
-    strings.lines.map{"#{@spacer}#{plus}#{_1}"}.join
-  end
-
-  def properties
-    with_spacer(@model.properties, '    ')
-  end
-
-  def assignment
-    with_spacer(@model.assignment, '      ')
-  end
--%>
+<% @spacer = '  ' * (@model.namespace.split(/::/).size - 1) -%>
 # frozen_string_literal: true
 require_relative '../basics'
 
 <%= @model.open_namespace %>
 <%= @spacer %>  # <%= @model.desc %>
-<%= @spacer %>  class <%= @model.const %> 
+<%= @spacer %>  class <%= @model.const %>
 <%= @spacer %>    extend Plugin
 
 <%= @spacer %>    def initialize(<%= @model.parameters %>)
-<%= assignment %>
+<%= @model.assignment.lines.map{"#{@spacer}      #{_1}"}.join %>
 <%= @spacer %>    end
 <%= @spacer %>  end
 

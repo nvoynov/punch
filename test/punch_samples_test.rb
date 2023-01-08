@@ -5,8 +5,7 @@ describe 'Samples' do
 
   let(:sentry) { Factory.decorate(:sentry, SentryModel.new('dummy')) }
   let(:source) {
-    model = ModelBuilder.('dummy', 'a', 'b:', 'c nil', 'e:integer 42')
-    Factory.decorate(:entity, model)
+    ModelBuilder.('dummy', 'a', 'b:', 'c nil', 'e:integer 42')
   }
 
   def render(erb, model)
@@ -20,7 +19,12 @@ describe 'Samples' do
     samples.each {|sample|
       puts "\n--- #{sample}"
       erb = File.read(sample)
-      model = sample =~ /sentry/ ? sentry : source
+      model = case sample
+        when /sentry/;  sentry
+        when /entity/;  Factory.decorate(:entity, source)
+        when /service/; Factory.decorate(:service, source)
+        when /plugin/;  Factory.decorate(:plugin, source)
+        end
       puts render(erb, model)
     }
   end

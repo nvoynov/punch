@@ -17,13 +17,17 @@ describe Builder do
         param :secret
       end
 
+      service :status
+
+      service :authenticate
+
       actor :user do
         service :sign_on do
           param :email
           param :secret
         end
 
-        service :sign_in do
+        service "Sign In" do
           param :email
           param :secret
         end
@@ -43,8 +47,17 @@ describe Builder do
     end
 
     assert_kind_of Domain, dom
+
+    assert_kind_of Array, dom.sentries
     assert_equal 2, dom.sentries.size
+
+    assert_kind_of Array, dom.entities
     assert_equal 2, dom.entities.size
+
+    assert_kind_of Array, dom.services
+    assert_equal 2, dom.services.size
+
+    assert_kind_of Array, dom.actors
     assert_equal 2, dom.actors.size
   end
 end

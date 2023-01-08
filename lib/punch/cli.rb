@@ -156,6 +156,7 @@ module Punch
       https://github.com/nvoynov/punch
 
       Usage:
+        bundle add punch --git https://github.com/nvoynov/punch.git
 
         punch new DIRECTORY                Create a new Punch project
 

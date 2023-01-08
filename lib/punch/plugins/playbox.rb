@@ -19,7 +19,7 @@ module Punch
     end
 
     def punch_home?
-      File.exist?(Punch::CONFIG)
+      File.exist?(Punch::CONFIG) || File.exist?('Gemfile')
     end
 
     DOMAIN  = 'domain'.freeze
@@ -122,6 +122,9 @@ module Punch
     end
 
     def append(name, string)
+      dir = File.dirname(name)
+      mkpath(dir) unless Dir.exist?(dir)
+
       File.open(name, 'a') do |f|
         f.puts string
       end

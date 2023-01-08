@@ -31,6 +31,12 @@ module Punch
         @domain.add_entity(entity)
       end
 
+      def service(name, desc = '', &block)
+        service = Service.new(name, desc)
+        service.instance_eval(&block) if block
+        @domain.add_service(service)
+      end
+
       def actor(name, desc = '', &block)
         actor = Actor.new(name, desc)
         actor.instance_eval(&block)

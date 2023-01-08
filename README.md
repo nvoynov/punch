@@ -1,14 +1,8 @@
 # Punch
 
-`Punch` is my subjective Ruby adaption of [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html). It privies you with just a few basic architecture abstractions, a code generator ("puncher") with customizable templates, DSL for developing clean domains, and CLI for punching.
+Punch focuses on domain business logic layer design in accordance with the principles of [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).
 
-Mainly `Punch` focuses on creating business logic layer. The basic abstraction are `Entity`, `Service`, and `Plugin`. Where Entity serves for data structure, Service for Use Case or Interactor, and Plugin for isolating your domain from external dependencies.
-
-The basic idea is to boost your efficiency by generating sources instead of writing in manually. You can look through [User Stories](UserStories.md) for its basic ideas.
-
-The more services and entities you need the more efficiency Punch could provide, so it will serve right for medium and rich domains, whereas, for small projects with just a few services, it might seem rather an over-complication.
-
-So when you see yourself in a situation with at least dozen of entities / services - give it a try - punch it.
+The basic idea is to provide a clean robust frame for business-logic design and bring efficiency by generating source code instead of writing manually.
 
 ## User Stories
 
@@ -43,6 +37,7 @@ test: test
 sentries: sentries
 entities: entities
 services: services
+plugins: plugins
 ```
 
 In accordance with these settings `Punch` will generate code inside `lib` folder and tests inside `test`. [Sentries](#sentry) will be punched into `lib/sentries.rb`, entities and services respectively into `lib/entities` and `lib/services`.
@@ -56,39 +51,12 @@ test: test/domain
 sentries: core/sentries
 entities: core/entities
 services: core/usecases
+plugins: core/plugins
 ```
 
 Punch will generate code inside `lib/domain` and tests inside `test/domain` folders, and besides, sentries will be placed into `app/domain/core/sentries.rb`, services into `app/domain/core/usecases`, entities into `app/domain/core/entities`.
 
 Although Punch is not about data store, punching ActiveRecord or Sequel model will be easy enough, you might just configure `entities: models` and provide your own templates (see [templates](#templates) section.)
-
-### Punch::Sentry
-
-The first Punch primitive is Sentry, and the reason that I point it out first is that it is utilized in services and entities generators and therefore should be explained before those generators interface.
-
-Sentry is a simple module for checking arguments. Its straight and only purpose is to ensure that argument is valid or raise failure otherwise. I'm sure every domain should have some sort of this defensive primitive.
-
-```ruby
-ShortString = Sentry.new(:str, "must be String[3..100]"
-) {|v| v.is_a?(String) && v.size.between?(3,100)}
-
-ShortString.(str) # => "str"
-
-ShortString.(nil)
-# => ArgumentError ":str must be String[3..100]"
-
-ShortString.error(nil)
-# => ":str must be String[3..100]"
-
-ShortString.error!(nil)
-# => ArgumentError ":str must be String[3..100]"
-
-ShortString.(nil, :name)
-# => ArgumentError ":name must be String[3..100]"
-
-ShortString.(nil, 'John Doe', 'Ups!')
-# => ArgumentError ":John Doe Ups!"
-```
 
 ### "punch service"
 
@@ -170,11 +138,11 @@ The `punch preview` command prints the generated code instead of write so you ca
 
 The `$ punch status` command provides you with basic information about "punched" sources, like how many sources you have punched and how many are still in the wild punched state.
 
-### Templates
+### "punch samples"
 
 You can customize default Punch templates according to your particular purpose. The `$ punch samples` command will copy default templates into your project directory in `.punch` folder. `punch service` and `punch entity` commands will get templates from the `.punch` folder if the folder exists. Those templates are just ERB based on Punch::SentryDecor and Punch::SourceDecor.
 
-### Punch Basics
+### "punch basics"
 
 Punch can provide you with its basic concept classes. The `$ punch basics` command will copy original concepts as follows. Except for Entity, all those classes are the basic concepts that Punch itself designed upon.
 
@@ -188,9 +156,41 @@ lib/basics.rb
 
 You can use these as a starter frame and evolve according to your needs.
 
+#### Punch::Sentry
+
+The first Punch primitive is [Sentry](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/sentry.rb) that is a simple module with straight and only purpose - to ensure that argument is valid or raise failure otherwise.
+
+```ruby
+ShortString = Sentry.new(:str, "must be String[3..100]"
+) {|v| v.is_a?(String) && v.size.between?(3,100)}
+
+ShortString.("string") # => "string"
+
+ShortString.("s")
+# => ArgumentError ":str must be String[3..100]"
+
+ShortString.(nil, :name)
+# => ArgumentError ":name must be String[3..100]"
+
+ShortString.(nil, 'John Doe', 'Ups!')
+# => ArgumentError ":John Doe Ups!"
+```
+
+#### Punch::Service
+
+[Service](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/servie.rb)
+
+#### Punch::Entity
+
+[Entity](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/entity.rb)
+
+#### Punch::Plugin
+
+[Plugin](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/plugin.rb)
+
 ### "punch domain"
 
-Punch goes a bit further than just a source code generator of services and entities (data and algorithms) and provides DSL for describing domains of those things.
+Punch goes a bit further than just a source code generator for services and entities and provides DSL for describing domains of those things.
 
 The `$ punch domain` command copies `domain` folder with a few Ruby sources inside your punched project:
 
@@ -200,66 +200,9 @@ domain.rb
 dogen.rb
 ```
 
-Having the `sample.rb` domain as an example, you can express your domain through Punch::DSL and then generate it with `dogen.rb`.
+Looking through [sample.rb](https://github.com/nvoynov/punch/blob/master/lib/assets/domain/sample.rb) example, you can express your domain and then generate it with `dogen.rb`.
 
 It seems very promising at the moment when besides the code generation you could generate help files,  SRS, interfaces, or whatever you could generate from the domain described in sentries (domain, type), entities, users, and services.
-
-```ruby
-DSL::Builder.build('Sample Users Domain') do
-
-  sentry :string, block: 'v.is_a?(Strinig)'
-  sentry :email,  'must be valid email address'
-  sentry :secret, 'at least 8 symbols with digits'
-
-  entity :user do
-    param :login, :sentry => :email
-    param :secret, :sentry => :secret
-  end
-
-  entity :credentials do
-    param :login, :sentry => :email
-    param :secret, :sentry => :secret
-  end
-
-  actor :user do
-    service :signup do
-      param :login, :sentry => :email
-      param :secret, :sentry => :secret
-    end
-
-    service :signin do
-      param :login, :sentry => :email
-      param :secret, :sentry => :secret
-    end
-
-    service :forget do
-      param :login, :sentry => :email
-      param :secret, :sentry => :secret
-    end
-  end
-
-  actor :admin do
-    service :query_users do
-      param :page_number, :sentry => :page_number
-      param :page_size, :sentry => :page_size
-    end
-
-    service :lock_user do
-      param :login, :sentry => :email
-    end
-
-    service :unlock_user do
-      param :login, :sentry => :email
-    end
-  end
-end
-```
-
-## What's next?
-
-The next step will be to design a sample User Domain for authorization and authentication and polishing Punch in tranches. Another question I want to answer there how many code will be written manually vs "punched" code. Punch domain and measure SLOC, develop business logic and measure SLOC.
-
-Then maybe design some extra code for basic storage and service adapters for dRuby and Rack.
 
 ## Development
 
