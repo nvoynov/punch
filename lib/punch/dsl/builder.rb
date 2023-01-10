@@ -42,6 +42,12 @@ module Punch
         actor.instance_eval(&block)
         @domain.add_actor(actor)
       end
+
+      def plugin(name, desc = '', &block)
+        plugin = Plugin.new(name, desc)
+        plugin.instance_eval(&block) if block
+        @domain.add_plugin(plugin)
+      end
     end
 
   end

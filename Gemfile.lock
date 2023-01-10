@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    punch (0.5.1)
+    punch (0.6.0)
 
 GEM
   remote: https://rubygems.org/

@@ -40,7 +40,8 @@ class TestPlaybox < Minitest::Test
     Sandbox.() {
       glob = playbox.punch_basics
       orig = Dir.glob("#{Punch.basics}/**/*")
-      orig << 'basics.rb'
+      # a bit weird
+      orig.push('basics.rb', 'punch.rb', 'basics.rb')
       assert_equal basename(orig), basename(glob)
     }
   end
@@ -65,9 +66,6 @@ class TestPlaybox < Minitest::Test
     Sandbox.() {
       samples = playbox.samples(:sentry)
       assert_equal 2, samples.size
-
-      # @todo unlock after templates
-      skip('samples are under costruction')
 
       samples = playbox.samples(:entity)
       assert_equal 2, samples.size

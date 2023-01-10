@@ -44,7 +44,13 @@ module Punch
     end
 
     def call
-      fail Failure, "#{self.class.name}#call must be overrided"
+      failure "#{self.class.name}#call must be overrided"
+    end
+
+    protected
+
+    def failure(message)
+      fail Failure, message
     end
 
   end

@@ -22,32 +22,45 @@ module Punch
       File.exist?(Punch::CONFIG) || File.exist?('Gemfile')
     end
 
-    DOMAIN  = 'domain'.freeze
-    BASICS  = 'basics'.freeze
-    SAMPLES = '.punch'.freeze
+    SAMPLES = '.punch/samples'.freeze
+    DOMAIN  = '.punch/domain'.freeze
+    PUNCH   = 'lib/punch'.freeze
+    PUNCH_BASICS = 'lib/punch/basics'.freeze
 
     def home_basics?
-      Dir.exist?(File.join('lib', BASICS))
+      Dir.exist?(PUNCH_BASICS)
     end
 
     # copies punch/basic sources into home
-    #   lib/basics/sentry.rb
-    #   lib/basics/entity.rb
-    #   lib/basics/service.rb
-    #   lib/basics/plugin.rb
-    #   lib/basics.rb
+    #   lib/punch/basics/sentry.rb
+    #   lib/punch/basics/entity.rb
+    #   lib/punch/basics/service.rb
+    #   lib/punch/basics/plugin.rb
+    #   lib/punch/basics.rb
+    #   lib/punch.rb
     # @return [Array<String>] with sources copied
     def punch_basics
       return if home_basics?
-      basics = File.join('lib', BASICS)
-      makedirs(basics)
-      cp_r "#{Punch.basics}/.", basics
-      sources = Dir.glob("#{basics}/*.rb")
-      punchrb = sources.map{|s|
-        "require_relative \"#{BASICS}/#{File.basename(s)}\""
-      }.join(?\n)
-      File.write("lib/#{BASICS}.rb", punchrb)
-      sources << "lib/#{BASICS}.rb"
+
+      makedirs(PUNCH)
+      cp_r "#{Punch.basics}/.", PUNCH_BASICS
+      sources = Dir.glob("#{PUNCH_BASICS}/*.rb")
+      fn = proc{|s| "require_relative \"basics/#{File.basename(s)}\"" }
+      basicsrb = 'lib/punch/basics.rb'
+      File.write(basicsrb, sources.map(&fn).join(?\n))
+      File.write('lib/punch.rb', "require_relative \"punch/basics\"")
+      location = [config.lib, config.domain, 'basics.rb'].reject(&:empty?)
+      basicsrb = File.join(*location)
+      content = <<~EOF
+        require_relative "../punch"
+
+        Sentry = Punch::Sentry
+        Entity = Punch::Entity
+        Plugin = Punch::Plugin
+        Service = Punch::Service
+      EOF
+      File.write(basicsrb, content)
+      sources.push('lib/punch/basics.rb', 'lib/punch.rb', basicsrb)
     end
 
     def home_samples?
@@ -58,9 +71,9 @@ module Punch
     # @return [Array<String>] with sources copied
     def punch_samples
       return if home_samples?
-      mkdir(SAMPLES)
+      makedirs(SAMPLES)
       cp_r "#{Punch.samples}/.", SAMPLES
-      Dir.glob("#{SAMPLES}/**/*")
+      Dir.glob("#{SAMPLES}/**/*", File::FNM_DOTMATCH).tap(&:shift)
     end
 
     def home_domain?
@@ -69,9 +82,9 @@ module Punch
 
     def punch_domain
       return if home_domain?
-      mkdir(DOMAIN)
+      makedirs(DOMAIN)
       cp_r "#{Punch.domain}/.", DOMAIN
-      Dir.glob("#{DOMAIN}/**/*")
+      Dir.glob("#{DOMAIN}/**/*", File::FNM_DOTMATCH).tap(&:shift)
     end
 
     def exist?(filename)
@@ -138,13 +151,17 @@ module Punch
         when :entity;  ['entity.rb.erb', 'test_entity.rb.erb']
         when :service; ['service.rb.erb', 'test_service.rb.erb']
         when :plugin;  ['plugin.rb.erb', 'test_plugin.rb.erb']
-        else fail ArgumentError, "Unknown model"
+        else fail ArgumentError, "Unknown Model"
         end
       dir = home_samples? ? SAMPLES : Punch.samples
       payload.map{|s| File.read(File.join(dir, s))}
     end
 
     protected
+
+    def config
+      @config ||= Punch.config
+    end
 
     def punch_home!
       fail Failure, "Punch folder required!"

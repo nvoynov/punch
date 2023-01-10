@@ -10,4 +10,4 @@ callback = proc{|event, payload| puts "- punching #{payload}.." }
 puts "Punching Domain Skeleton.."
 PunchDomain.(domain, &callback)
 puts "Success!"
-puts Dir.glob("#{Punch.config.lib}/**.rb").map{ "- #{_1}" }
+puts Dir.glob("#{Punch.config.lib}/**/*.rb").map{ "- #{_1}" }

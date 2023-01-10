@@ -64,8 +64,6 @@ class TestPunchSentry < Minitest::Test
 
   def test_declared
     Sandbox.() {
-      assert_equal ['MustbeString'], service.declared
-      assert service.declared?('MustbeString')
       refute service.declared?('MustbeFaulty')
     }
 
@@ -78,9 +76,9 @@ class TestPunchSentry < Minitest::Test
       File.write('lib/sentries.rb', fewsentries)
 
       declared = service.declared
-      assert_equal %w(MustbeInteger MustbeAnother), declared
       assert service.declared?('MustbeInteger')
       assert service.declared?('MustbeAnother')
+      assert_equal %w(MustbeInteger MustbeAnother), declared
     }
   end
 end

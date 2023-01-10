@@ -39,7 +39,13 @@ def map_logged_to_exist(log)
     .map{|f| File.exist?(f) }
 end
 
-def print_dir_glob(pat = '**/*')
-  puts "\n~ #{Dir.pwd} ~"
+def print_folders(pat = '**/*')
+  puts "\n--- #{Dir.pwd}\n"
   puts Dir.glob(pat, File::FNM_DOTMATCH)
+end
+
+def print_content(*names)
+  names.each do |source|
+    puts "\n--- #{source}\n#{File.read(source)}\n"
+  end
 end

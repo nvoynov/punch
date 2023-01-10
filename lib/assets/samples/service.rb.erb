@@ -1,6 +1,6 @@
 <% @spacer = '  ' * (@model.namespace.split(/::/).size - 1) -%>
 # frozen_string_literal: true
-require_relative 'service'
+require_relative "../basics"
 
 <%= @model.open_namespace %>
 <%= @spacer %>  # <%= @model.desc %>
@@ -12,10 +12,10 @@ require_relative 'service'
 
 <%= @spacer %>    def call
 <%= @spacer %>      # user = storage.get(User, email: @email)
-<%= @spacer %>      # fail Failure, "Email already exists" if user
+<%= @spacer %>      # failure("Email already exists") if user
 <%= @spacer %>      # user = User.new(<%= @model.arguments %>)
 <%= @spacer %>      # storage.put(user)
-<%= @spacer %>      fail Failure, 'UNDER CONSTRUCTION'
+<%= @spacer %>      failure("UNDER CONSTRUCTION")
 <%= @spacer %>    end
 <%= @spacer %>  end
 

@@ -8,7 +8,7 @@ module Punch
 
     def config
       return Psych.load_file(CONFIG).freeze if File.exist?(CONFIG)
-      conf = Config.new('lib', 'test', 'sentries', 'entities', 'services', 'plugins')
+      conf = Config.new('lib', 'test', '', 'sentries', 'entities', 'services', 'plugins')
       File.write(CONFIG, Psych.dump(conf))
       conf
     end
@@ -39,6 +39,6 @@ module Punch
     end
   end
 
-  Config = Struct.new(:lib, :test, :sentries, :entities, :services, :plugins)
+  Config = Struct.new(:lib, :test, :domain, :sentries, :entities, :services, :plugins)
   CONFIG = 'punch.yml'.freeze
 end

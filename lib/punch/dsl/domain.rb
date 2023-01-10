@@ -26,6 +26,10 @@ module Punch
       include ParamMixin
     end
 
+    class Plugin < Punch::Model
+      include ParamMixin
+    end
+
     class Actor < Punch::Basic
       def initialize(name, desc = '')
         super(name, desc)
@@ -38,7 +42,7 @@ module Punch
       end
 
       def service(name, desc = '', &block)
-        service = Service.new("#{@name}/#{name}", desc)
+        service = Service.new("#{@name} #{name}", desc)
         service.instance_eval(&block) if block
         self.<<(service)
       end
@@ -57,6 +61,7 @@ module Punch
         @sentries = {}
         @entities = {}
         @services = {}
+        @plugins = {}
         @actors = {}
       end
 
@@ -68,12 +73,16 @@ module Punch
         @entities[entity.name] = entity
       end
 
+      def add_service(service)
+        @services[service.name] = service
+      end
+
       def add_actor(actor)
         @actors[actor.name] = actor
       end
 
-      def add_service(service)
-        @services[service.name] = service
+      def add_plugin(plugin)
+        @plugins[plugin.name] = plugin
       end
 
       def sentries
@@ -85,11 +94,19 @@ module Punch
       end
 
       def services
-        @services.values
+        Array.new(@services.values).tap{|ary|
+          actors.each{|a|
+            ary.concat(a.services)
+          }
+        }
       end
 
       def actors
         @actors.values
+      end
+
+      def plugins
+        @plugins.values
       end
 
     end

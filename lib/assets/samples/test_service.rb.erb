@@ -3,12 +3,24 @@ include <%= @model.namespace %>
 
 describe <%= @model.const %> do
   let(:service) { <%= @model.const %> }
-  let(:payload) { [<%= @model.arguments %>] }
+  let(:payload) { {<%= @model.arguments %>} }
 
   it 'must #call' do
-    assert service.(*payload)
-    # storage.stub :get, Object.new do
-    #   service.(*payload)
+    # assumed that there are no plugins implementations at the stage
+    # so instead of just "assert service.(**payload)", plugins should
+    # be mocked, or maybe stubbed for only one plugin an one method
+    #
+    # PluginHolder.object.stub :get, dummy do
+    #   result = service.(**payload)
+    #   assert_equal dummy, result
+    # end#
+    #
+    # @mock = Minitest::Mock.new
+    # @mock.expect :get, dummy, [User], **payload
+    # @mock.expect :put, dummy, [User]
+    # PluginHolder.stub :object, @mock do
+    #   result = service.(**payload)
+    #   assert_equal dummy, result
     # end
   end
 end

@@ -36,7 +36,6 @@ module Punch
       def call
         @klass = MustbeKlassDecor.(@args.shift)
         MustbeModelArray.(@args)
-        storage.punch_basics
         decorator(@args.first) # must fail for unknown klass
         @log = []
         payload = sentries

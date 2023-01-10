@@ -3,7 +3,7 @@ include <%= @model.namespace %>
 
 class Test<%= @model.const %> < Minitest::Test
   def plugin
-    <%= @model.const %>.new(@model.arguments)
+    <%= @model.const %>.new(<%= @model.arguments %>)
   end
 
   def test_something

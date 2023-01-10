@@ -1,8 +1,15 @@
 # Punch
 
-Punch focuses on domain business logic layer design in accordance with the principles of [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).
+The Punch's basic idea is to provide a clean robust frame for domain business logic and bring efficiency to the design process.
 
-The basic idea is to provide a clean robust frame for business-logic design and bring efficiency by generating source code instead of writing manually.
+Playing last year with [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) I found it just a really amazing tool, but it also was a bit tiresome because of the necessity to create and require entities and services sources separately. That's why I designed Punch, which provides:  
+
+- three basic blocks - entity, service, and plugin
+- source code templates for those blocks
+- command-line interface for punching those blocks
+- simple domain DSL to express and "punch" domains
+
+You can find an example of a "punched" domain in [punch_users](https://github.com/nvoynov/punch_users.git) repository.
 
 ## User Stories
 
@@ -28,35 +35,33 @@ Just run `$ punch` and see banner for basic usage, create a new Punch Project by
 
 ### Configuration
 
-Punch can be configured through `punch.yml` file that can be found inside your punch project. One can point out directories for punching based on a particular concept. The default settings are
+Punch can be configured through `punch.yml` file that can be found inside your punch project. One can point out directories for punching based on a particular concept. The default settings are:
 
 ```yml
---- !ruby/struct:Punch::Config
 lib: lib
 test: test
+domain:
 sentries: sentries
 entities: entities
 services: services
 plugins: plugins
 ```
 
-In accordance with these settings `Punch` will generate code inside `lib` folder and tests inside `test`. [Sentries](#sentry) will be punched into `lib/sentries.rb`, entities and services respectively into `lib/entities` and `lib/services`.
+In accordance with these settings `Punch` will generate code inside `lib` and tests inside `test`. [Sentries](#sentry) will be punched into `lib/sentries.rb`, entities and services respectively into `lib/entities` and `lib/services`; concepts namespaces will be `Entities`, `Services`, and `Plugins`
 
-When you change it like follows,
+When you change `domain` settings as `domain: domain`, code will be placed to `lib/domain`. Assuming running the `$ punch service sign_in email password` command Punch will generate
 
-```yml
---- !ruby/struct:Punch::Config
-lib: app/domain
-test: test/domain
-sentries: core/sentries
-entities: core/entities
-services: core/usecases
-plugins: core/plugins
-```
+- `lib/domain/services/sing_in.rb`
+- `lib/domain/services.rb~` (require "services/sign_in")
+- `test/domain/services/test_sing_in.rb`  
+- `Domain::Services` will be the service namespace
 
-Punch will generate code inside `lib/domain` and tests inside `test/domain` folders, and besides, sentries will be placed into `app/domain/core/sentries.rb`, services into `app/domain/core/usecases`, entities into `app/domain/core/entities`.
+You can go even further and run `$ punch service user/sign_in email password` and it this case if will affect output as:
 
-Although Punch is not about data store, punching ActiveRecord or Sequel model will be easy enough, you might just configure `entities: models` and provide your own templates (see [templates](#templates) section.)
+- `lib/domain/services/user/sing_in.rb`
+- `lib/domain/services/user.rb~` (require "user/sign_in")
+- `test/domain/services/user/test_sing_in.rb`  
+- `Domain::Services::User` will be the service namespace
 
 ### "punch service"
 
@@ -64,14 +69,14 @@ The `$ punch service NAME [PARM] [PARAM] ...` command will punch a new service- 
 
 The output of the command will be the list of created or modified source files by the command. It is safe enough to prevent you from losing important changes inside punched sources. So when you "punched" some source and then "re-punch" the same concept again, Punch will check was the content changed from its punched state. The command will be aborted for changed content, or the previous copy will be backed for "wild-punched" content.
 
-When you run something like `$punch service sign_up login secret`, Punch will generate code according with service template, something like follows
+When you run something like `$punch service sign_up login password`, Punch will generate code according with service template, something like follows
 
 ```ruby
 module Services
   class SignUp < Service
-    def initialize(login, secret)
+    def initialize(login, password)
       @login = login
-      @secret = secret
+      @password = password
     end
 
     def call
@@ -80,30 +85,30 @@ module Services
 end
 ```
 
-The `login` and `secret` parameters there could be passed in a few ways and the chosen way will affect for code generation output.
+The `login` and `password` parameters there could be passed in a few ways and the chosen way will affect for code generation output.
 
-1. Finishing parameters with `:` will tell the Punch to generate keyword arguments, so `sign_up loging: secret:` will generate constructor declaration as `def initialize(login:, secret:)`
-2. Providing default values for parameters like `sign_up "login \"user\"" "secret \"$ecret\""` will generate `def initialize(login = "user", secret = "$ecret")`
-3. In the same manner you can provided default values for keyword arguments - `sign_up "login: \"user\"" "secret: \"$ecret\""` will generate `def initialize(login: "user", secret: "$ecret")`
+1. Finishing parameters with `:` will tell the Punch to generate keyword arguments, so `sign_up login: password:` will generate constructor declaration as `def initialize(login:, password:)`
+2. Providing default values for parameters like `sign_up "login \"user\"" "password \"$ecret\""` will generate `def initialize(login = "user", password = "$ecret")`
+3. In the same manner you can provided default values for keyword arguments - `sign_up "login: \"user\"" "password: \"$ecret\""` will generate `def initialize(login: "user", password: "$ecret")`
 4. Positional and keyword arguments can be mixed together. Punch is advanced enough to place it into right order - positional first, positional with default values next, and keywords at the end.
 
 And finally we can meet the [Sentry](#sentry). For keyword arguments you can point a sentry, and being pointed for an argument, constructor will validate the argument with the provided sentry.
 
-Passing parameters as `sign_up login:login secret:secret` tell Punch to generate `login` and `secret` sentries first, and then validate `login` and `secret` parameters inside constructor.
+Passing parameters as `sign_up login:login password:password` tell Punch to generate `login` and `password` sentries first, and then validate `login` and `secret` parameters inside constructor.
 
 In `sentries.rb` will be placed two new sentries unless they do not exist.
 
 ```ruby
 MustbeLogin = Sentry.new(:login, ...
-MustbeSecret = Sentry.new(:secret, ...
+MustbePassword = Sentry.new(:secret, ...
 ```
 
 The constructor became
 
 ```ruby
-def initialize(login:, secret:)
+def initialize(login:, password:)
   @login = MustbeLogin.(login)
-  @secret = MustbeSecret.(login)
+  @secret = MustbePassword.(password)
 end
 ```
 
@@ -117,10 +122,10 @@ module Entities
     attr_reader :login
     attr_reader :secret
 
-    def initialize(id:, login:, secret:)
+    def initialize(id:, login:, password:)
       super(id)
       @login = MustbeLogin.(login)
-      @secret = MustbeSecret.(ssecret)
+      @secret = MustbePassword.(password)
     end
   end
 end
@@ -128,7 +133,7 @@ end
 
 ### "punch plugin"
 
-The `punch plugin NAME` command will "punch" Plugin, the command behavior is similar to `punch service/entity`.
+The `punch plugin NAME` command will "punch" Plugin, the command behavior is similar to `punch service/entity`. In addition it will create `config.rb` file with Plugin::Holders placed there.
 
 ### "punch preview"
 
@@ -140,25 +145,24 @@ The `$ punch status` command provides you with basic information about "punched"
 
 ### "punch samples"
 
-You can customize default Punch templates according to your particular purpose. The `$ punch samples` command will copy default templates into your project directory in `.punch` folder. `punch service` and `punch entity` commands will get templates from the `.punch` folder if the folder exists. Those templates are just ERB based on Punch::SentryDecor and Punch::SourceDecor.
+You can customize default Punch templates according to your particular purpose. The `$ punch samples` command will copy default templates into your project in `.punch/samples` folder and Punch will get templates from there. Those templates are just ERB based on Punch::SentryDecor and Punch::SourceDecor.
 
 ### "punch basics"
 
-Punch can provide you with its basic concept classes. The `$ punch basics` command will copy original concepts as follows. Except for Entity, all those classes are the basic concepts that Punch itself designed upon.
+Punch can provide you with its own basic concept it itself designed upon. The `$ punch basics` command will copy sources as follows. You can use those as a starter and evolve according to your needs.
 
 ```
-lib/basics/sentry.rb
-lib/basics/entity.rb
-lib/basics/service.rb
-lib/basics/plugin.rb
-lib/basics.rb
+lib/punch/basics/sentry.rb
+lib/punch/basics/entity.rb
+lib/punch/basics/service.rb
+lib/punch/basics/plugin.rb
+lib/punch/basics.rb
+lib/punch.rb
 ```
-
-You can use these as a starter frame and evolve according to your needs.
 
 #### Punch::Sentry
 
-The first Punch primitive is [Sentry](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/sentry.rb) that is a simple module with straight and only purpose - to ensure that argument is valid or raise failure otherwise.
+[Sentry](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/sentry.rb) that is a simple module with straight and only purpose - to ensure that argument is valid or raise failure otherwise.
 
 ```ruby
 ShortString = Sentry.new(:str, "must be String[3..100]"
@@ -178,31 +182,70 @@ ShortString.(nil, 'John Doe', 'Ups!')
 
 #### Punch::Service
 
-[Service](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/servie.rb)
+[Service](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/servie.rb) is very basic class with `call` method with the idea to do the job and return the result or fail.
+
+```ruby
+class SingIn < Service
+  def intitialize(login, password)
+    @login = login
+    @password = password
+  end
+
+  def call
+    user = storage.get(User, login: @login)
+    failure("Wrong login or password") unless user
+    failure("Wrong login or password") unless user.password == password
+    user
+  end
+end
+```
+
+You can provide your own templates and basic concepts if it does not fit your expectations
 
 #### Punch::Entity
 
-[Entity](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/entity.rb)
+[Entity](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/entity.rb) is just minimal entity class with `id` attribute that passed nil becomes `SecureRandom.uuid`
+
+You might work with ActiveRecord or other models instead of just plain entities, and in this case you can also provide your own model and test templates and even change `entities: enttities` into `entities: model`. That way you calling `$ punch entity user` you'll get
+
+- `lib/domain/models/user.rb`
+- `test/domain/models/test_user.rb`
 
 #### Punch::Plugin
 
-[Plugin](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/plugin.rb)
+[Plugin](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/plugin.rb) is a simple mixin for your plugin interfaces (implementations external to the domain) and when you have dependent services you can write something like
+
+```ruby
+require "forwardable"
+require "basics"
+require "config"
+
+class UserSignUp < Service
+  extend Forwardable
+  def_delegator :StorageHolder, :object, :storage
+  def_delegator :SecretsHolder, :object, :secrets
+ # skipped ..
+end
+```
 
 ### "punch domain"
 
-Punch goes a bit further than just a source code generator for services and entities and provides DSL for describing domains of those things.
+Punch goes a bit further than just a source code generator for services an d entities and provides DSL for describing domains of those things.
 
-The `$ punch domain` command copies `domain` folder with a few Ruby sources inside your punched project:
+The `$ punch domain` command create `.punch/domain` folder with a few Ruby sources inside your punched project:
 
 ```
 sample.rb
 domain.rb
 dogen.rb
+README.md
 ```
 
-Looking through [sample.rb](https://github.com/nvoynov/punch/blob/master/lib/assets/domain/sample.rb) example, you can express your domain and then generate it with `dogen.rb`.
+Looking through [sample.rb](https://github.com/nvoynov/punch/blob/master/lib/assets/domain/sample.rb), you can express your domain and then generate it with `dogen.rb` script.
 
-It seems very promising at the moment when besides the code generation you could generate help files,  SRS, interfaces, or whatever you could generate from the domain described in sentries (domain, type), entities, users, and services.
+It seems very promising at the moment when besides the code generation you could generate help files, SRS, interfaces, or whatever you could generate from the domain described in sentries (domain, type), entities, users, and services.
+
+For the example, writing requirements I always elaborate on "Use Cases" and "Entities" sections of SRS, so my SRS can be easily expressed by the `Punch::DSL`
 
 ## Development
 

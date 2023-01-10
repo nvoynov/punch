@@ -29,12 +29,11 @@ module Punch
         @log.unshift sentriesrb
       end
 
-      def sentriesrb
-        @sentriesrb ||= File.join(config.lib, config.sentries + '.rb')
-      end
-
-
       protected
+
+      def sentriesrb
+        @sentriesrb ||= decorator(@args[0]).source
+      end
 
       def decorator(model)
         Factory.decorate(:sentry, model)
@@ -42,7 +41,6 @@ module Punch
 
       def punch(model)
         @buffer << render(@source, model)
-        # storage.write(decor.sorce, source)
         test = render(@test, model)
         storage.write(model.test, test)
         @log << model.test
@@ -75,12 +73,7 @@ module Punch
 
       SENTRIES = <<~EOF.freeze
         # frozen_string_literal: true
-
-        require_relative "punch"
-        include Punch
-
-        # MustbeString
-        MustbeString = Sentry.new(:key, 'must be String') {|v| v.is_a?(String)}
+        require_relative "basics"
 
       EOF
     end

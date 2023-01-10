@@ -1,14 +1,21 @@
 <% @spacer = '  ' * (@model.namespace.split(/::/).size - 1) -%>
 # frozen_string_literal: true
-require_relative '../basics'
+require_relative "../basics"
 
 <%= @model.open_namespace %>
 <%= @spacer %>  # <%= @model.desc %>
 <%= @spacer %>  class <%= @model.const %>
 <%= @spacer %>    extend Plugin
+<%= @spacer %>    Failure = Class.new(StandardError)
 
 <%= @spacer %>    def initialize(<%= @model.parameters %>)
 <%= @model.assignment.lines.map{"#{@spacer}      #{_1}"}.join %>
+<%= @spacer %>    end
+
+<%= @spacer %>    protected
+<%= @spacer %>
+<%= @spacer %>    def failure(message)
+<%= @spacer %>      fail Failure, message
 <%= @spacer %>    end
 <%= @spacer %>  end
 

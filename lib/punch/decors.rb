@@ -7,15 +7,16 @@ module Punch
   class Factory
     def self.decorate(klass, model)
       conf = Punch.config
+      base = [conf.lib, conf.test, conf.domain]
       case klass.to_sym
       when :sentry
-        SentryDecor.new(conf.lib, conf.test, conf.sentries, model)
+        SentryDecor.new(*base.concat([conf.sentries, model]))
       when :entity
-        SourceDecor.new(conf.lib, conf.test, conf.entities, model)
+        SourceDecor.new(*base.concat([conf.entities, model]))
       when :service
-        SourceDecor.new(conf.lib, conf.test, conf.services, model)
+        SourceDecor.new(*base.concat([conf.services, model]))
       when :plugin
-        SourceDecor.new(conf.lib, conf.test, conf.plugins, model)
+        SourceDecor.new(*base.concat([conf.plugins, model]))
       else
         fail "Unknown klass for decoration"
       end
@@ -25,10 +26,11 @@ module Punch
   # Ruby source code decorator for Model
   class SourceDecor < SimpleDelegator
 
-    def initialize(home, test, base, model)
+    def initialize(home, test, domain, base, model)
       @home = home
       @test = test
       @base = base
+      @domain = domain
       super(model)
     end
 
@@ -47,13 +49,15 @@ module Punch
 
     def test
       name.split(SEPARATOR)
-        .unshift(@test, @base)
+        .unshift([@test, @domain, @base].reject(&:empty?))
         .then{|ary| ary.push("test_#{ary.pop}.rb") }
         .then{|ary| File.join(ary) }
     end
 
     def test_helper
-      level = namespace.split(/::/).size + 1
+      level = namespace.split(/::/).size
+      test_level = @test.split(SEPARATOR).size - 1
+      level += test_level if test_level > 0
       "#{'../' * level}test_helper"
     end
 
@@ -75,7 +79,7 @@ module Punch
     # @todo see by examples, it should cut <name>.rb
     #   services/user/create_order.rb -> Services::User
     def namespace
-      File.join(@base, name)
+      File.join([@domain, @base, name].reject(&:empty?))
         .split(SEPARATOR)
         .then{|ary| ary.pop; ary }
         .map{ constanize(_1) }
@@ -135,11 +139,11 @@ module Punch
     protected
 
     def path
-      File.join(@home, @base)
+      File.join([@home, @domain, @base].reject(&:empty?))
     end
 
     def relative_path
-      File.join(@base, "#{name}.rb")
+      File.join([@domain, @base, "#{name}.rb"].reject(&:empty?))
     end
 
     def sanitize(str)
@@ -158,6 +162,10 @@ module Punch
     def const
       # constanize("#{PREFIX}#{name}")
       PREFIX + super
+    end
+
+    def source
+      path + '.rb'
     end
 
     PREFIX = 'Mustbe'.freeze

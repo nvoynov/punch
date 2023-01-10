@@ -34,14 +34,15 @@ module Punch
 
       klass = args.shift.downcase.to_sym
       unless %i[entity service plugin].include?(klass)
-        puts "required 'entity' or 'service'"
+        puts "required entity|service|plugin"
         return
       end
 
       secure_call {
         logger.info { "punch #{args.join(?\s)}" }
         model = ModelBuilder.(*args)
-        PunchSource.(klass, model)
+        service = klass == :plugin ? PunchPlugin : PunchSource
+        service.(klass, model)
       }
     end
 

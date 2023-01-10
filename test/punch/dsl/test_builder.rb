@@ -17,6 +17,8 @@ describe Builder do
         param :secret
       end
 
+      plugin :storage
+
       service :status
 
       service :authenticate
@@ -55,7 +57,7 @@ describe Builder do
     assert_equal 2, dom.entities.size
 
     assert_kind_of Array, dom.services
-    assert_equal 2, dom.services.size
+    assert_equal 7, dom.services.size
 
     assert_kind_of Array, dom.actors
     assert_equal 2, dom.actors.size
