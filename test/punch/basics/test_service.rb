@@ -6,7 +6,7 @@ class TestService < Minitest::Test
   end
 
   def test_overrided
-    assert_raises(service::Failure) { service.() }
+    assert_raises(RuntimeError) { service.() }
   end
 
   def test_default_constructor

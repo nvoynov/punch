@@ -1,4 +1,4 @@
-require_relative "../test_helper"
+require_relative "test_helper"
 
 class TestCLI < Minitest::Test
 
@@ -10,7 +10,7 @@ class TestCLI < Minitest::Test
     puts "\n--- CLI.folder"
     Tempbox.() {
       CLI.folder(dummy)
-      print_dir_glob
+      print_folders
       CLI.folder(dummy)
     }
   end
@@ -36,9 +36,7 @@ class TestCLI < Minitest::Test
 
       puts "> proper plugin"
       CLI.source(*%w[plugin storage])
-
-
-      print_dir_glob
+      print_folders
     }
   end
 
@@ -60,7 +58,7 @@ class TestCLI < Minitest::Test
       CLI.preview(*%w[service signin])
       puts "> proper service with sentry"
       CLI.preview('service', 'create_order', 'customer_id:uuid')
-      print_dir_glob
+      print_folders
     }
   end
 

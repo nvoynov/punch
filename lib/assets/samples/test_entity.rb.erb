@@ -4,7 +4,7 @@ include <%= @model.namespace %>
 describe <%= @model.const %> do
   let(:entity) { <%= @model.const %>.new(<%= @model.parameters %>) }
 
-  it 'must do something' do
+  it {
     assert entity
-  end
+  }
 end

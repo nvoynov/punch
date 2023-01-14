@@ -14,37 +14,40 @@ module Punch
 
     class PunchDomain < Service
       def call
+        log = []
         @domain = MustbeDomain.(@args[0])
         @block = proc{|event, payload|} unless @block
 
         payload = @domain.sentries
         @block.(:stage, 'sentries') if payload.any?
-        PunchSentry.(*payload) if payload.any?
+        log.concat PunchSentry.(*payload) if payload.any?
 
         payload = @domain.entities
         @block.(:stage, 'entities') if payload.any?
-        PunchSource.(:entity, *payload) if payload.any?
+        log.concat PunchSource.(:entity, *payload) if payload.any?
 
         payload = @domain.services
         @block.(:stage, 'services') if payload.any?
-        PunchSource.(:service, *payload) if payload.any?
+        log.concat PunchSource.(:service, *payload) if payload.any?
 
         payload = @domain.plugins
         @block.(:stage, 'plugins') if payload.any?
-        PunchPlugin.(:plugin, *payload) if payload.any?
+        log.concat PunchPlugin.(:plugin, *payload) if payload.any?
 
-        return if config.domain.empty?
+        log.uniq!
+        return log if config.domain.empty?
 
         reqstr = "require_relative \"#{config.domain}/%s\""
         content = []
+        content << reqstr % "basics"
+        content << reqstr % "config"
         content << reqstr % config.sentries if @domain.sentries.any?
         content << reqstr % config.entities if @domain.entities.any?
         content << reqstr % config.services if @domain.services.any?
         content << reqstr % config.plugins  if @domain.plugins.any?
-        content << reqstr % "basics"
-        content << reqstr % "config"
         domainrb = File.join(config.lib, config.domain + '.rb')
-        storage.write(domainrb, content.join(?\n))
+        log.concat storage.write(domainrb, content.join(?\n))
+        log
       end
     end
 

@@ -11,11 +11,8 @@ require_relative "../basics"
 <%= @spacer %>    end
 
 <%= @spacer %>    def call
-<%= @spacer %>      # user = storage.get(User, email: @email)
-<%= @spacer %>      # failure("Email already exists") if user
-<%= @spacer %>      # user = User.new(<%= @model.arguments %>)
-<%= @spacer %>      # storage.put(user)
-<%= @spacer %>      failure("UNDER CONSTRUCTION")
+<%= @spacer %>      # user = storage.find(User, email: @email)
+<%= @spacer %>      fail "#{self.class}#call UNDER CONSTRUCTION"
 <%= @spacer %>    end
 <%= @spacer %>  end
 

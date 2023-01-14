@@ -1,4 +1,3 @@
---- !ruby/struct:Punch::Config
 lib: lib
 test: test
 domain: ''

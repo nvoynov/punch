@@ -51,8 +51,9 @@ module Punch
       File.write('lib/punch.rb', "require_relative \"punch/basics\"")
       location = [config.lib, config.domain, 'basics.rb'].reject(&:empty?)
       basicsrb = File.join(*location)
+      punchrb = config.domain.empty? ? "punch" : "../punch"
       content = <<~EOF
-        require_relative "../punch"
+        require_relative "#{punchrb}"
 
         Sentry = Punch::Sentry
         Entity = Punch::Entity

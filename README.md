@@ -9,7 +9,18 @@ Playing last year with [The Clean Architecture](https://blog.cleancoder.com/uncl
 - command-line interface for punching those blocks
 - simple domain DSL to express and "punch" domains
 
-You can find an example of a "punched" domain in [punch_users](https://github.com/nvoynov/punch_users.git) repository.
+You can find an example of a "punched" domain in **[punch_users](https://github.com/nvoynov/punch_users.git)** repository that could speak a bit for the Punch efficiency.
+
+- 85% of source files were "punched" and 15% were created manually;
+- 50% of Ruby LOC were "punched" and the other 50% were created manually.
+
+```
+Location   Total   "Punched" SLOC       Blank    Comments  Net Ruby LOC
+---------- ------- --------- ---------- -------- --------- ------------
+lib        23 (17) 13 (13)   657 (329)  102 (53) 175 (93)  380 (183)
+test       17 (17) 15 (16)   363 (335)  46 (38)  45 (150)  272 (147)
+lib + test 40 (34) 28 (29)   1020 (664) 148 (91) 220 (243) 652 (330)
+```
 
 ## User Stories
 
@@ -62,6 +73,15 @@ You can go even further and run `$ punch service user/sign_in email password` an
 - `lib/domain/services/user.rb~` (require "user/sign_in")
 - `test/domain/services/user/test_sing_in.rb`  
 - `Domain::Services::User` will be the service namespace
+
+### Logging
+
+Punch logs all `$ punch COMMAND` in `punch.log`. You can use the log to do some extra job for "punched" concepts.
+
+```
+[2023-01-12 15:11:34 +0200] INFO : punch queries
+[2023-01-12 15:11:34 +0200] INFO : lib/users/plugins/queries.rb, lib/users/plugins.rb~, lib/users/config.rb~, test/users/plugins/test_queries.rb
+```
 
 ### "punch service"
 
@@ -182,7 +202,7 @@ ShortString.(nil, 'John Doe', 'Ups!')
 
 #### Punch::Service
 
-[Service](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/servie.rb) is very basic class with `call` method with the idea to do the job and return the result or fail.
+[Service](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/servie.rb) is very basic class where one supposed to override `#call` method to do some job.
 
 ```ruby
 class SingIn < Service
@@ -246,6 +266,12 @@ Looking through [sample.rb](https://github.com/nvoynov/punch/blob/master/lib/ass
 It seems very promising at the moment when besides the code generation you could generate help files, SRS, interfaces, or whatever you could generate from the domain described in sentries (domain, type), entities, users, and services.
 
 For the example, writing requirements I always elaborate on "Use Cases" and "Entities" sections of SRS, so my SRS can be easily expressed by the `Punch::DSL`
+
+### Having punched..
+
+I can see some situations when one need some more code for punched concepts, like creating database migrations or sort of case.
+
+At the moment, when you are "punching" concepts by CLI - you have `punch.log` that you can parse. Unfortunately, at the moment it's not the case for punching domains. But some code could be generated based on "punched" sources, fake entities, etc.
 
 ## Development
 

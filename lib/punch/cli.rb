@@ -39,7 +39,7 @@ module Punch
       end
 
       secure_call {
-        logger.info { "punch #{args.join(?\s)}" }
+        logger.info { "punch #{klass} #{args.join(?\s)}" }
         model = ModelBuilder.(*args)
         service = klass == :plugin ? PunchPlugin : PunchSource
         service.(klass, model)
@@ -140,15 +140,13 @@ module Punch
         puts "  #{action} #{item}"
       }
     # something that we wait for
-    rescue StandardError => ex
-      logger.error(ex)
+    rescue => e
+      logger.error e
+      logger.error e.backtrace
       puts <<~EOF
-        #{ex.message} (#{ex.class.name})
+        #{e.message} (#{e.class.name})
         See '#{logger.device}' for details
       EOF
-    # some unexpected
-    rescue => ex
-      puts ex
     end
 
     BANNER = <<~EOF.freeze
@@ -171,21 +169,20 @@ module Punch
           PARAM: name[:][sentry][default]  zero or more parameters
 
         punch preview COMMAND              Preview generation result
-          entity|e NAME [PARAM..]          command to preview...
-          service|s NAME [PARAM..]
+          service NAME [PARAM..]           command to preview...
+          entity NAME [PARAM..]
+          plugin NAME [PARAM..]
 
         punch status                       Print Punch Project status
         punch samples                      Copy templates for customization
         punch basics                       Copy basic classes
         punch domain                       Copy domain DSL example
 
-      Feel free to run a few preview before start punching:
+      Run a preview before start punching:
 
         $ punch preview service signup name email
-        $ punch preview service user/signup "name 'user'" email
-        $ punch preview service user/signup name: email:
-        $ punch preview service user/signin login:email secret:secret
-        $ punch preview service user/signin login:email "secret:secret 'pa$$w0rd'"
+        $ punch preview service signin email:email password:password
+        $ punch preview service signin login:email "password:password 'pa$$w0rd'"
     EOF
 
     MOTTO = "Keep code clean, and happy punching!".freeze

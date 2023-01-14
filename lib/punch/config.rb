@@ -7,10 +7,18 @@ module Punch
   class << self
 
     def config
-      return Psych.load_file(CONFIG).freeze if File.exist?(CONFIG)
       conf = Config.new('lib', 'test', '', 'sentries', 'entities', 'services', 'plugins')
-      File.write(CONFIG, Psych.dump(conf))
-      conf
+      conf.freeze
+      text = Psych.dump(conf)
+      head = text.lines.first
+      body = text.lines.drop(1).join
+      unless File.exist?(CONFIG)
+        File.write(CONFIG, body)
+        return conf
+      end
+      body = File.read(CONFIG)
+      obj = Psych.load([head, body].join, freeze: true)
+      obj.is_a?(Config) ? obj : conf # test for faulty load result
     end
 
     def root

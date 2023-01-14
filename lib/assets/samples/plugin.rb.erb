@@ -6,16 +6,16 @@ require_relative "../basics"
 <%= @spacer %>  # <%= @model.desc %>
 <%= @spacer %>  class <%= @model.const %>
 <%= @spacer %>    extend Plugin
+
 <%= @spacer %>    Failure = Class.new(StandardError)
+
+<%= @spacer %>    def self.inherited(klass)
+<%= @spacer %>      klass.const_set(:Failure, Class.new(klass::Failure))
+<%= @spacer %>      super
+<%= @spacer %>    end
 
 <%= @spacer %>    def initialize(<%= @model.parameters %>)
 <%= @model.assignment.lines.map{"#{@spacer}      #{_1}"}.join %>
-<%= @spacer %>    end
-
-<%= @spacer %>    protected
-<%= @spacer %>
-<%= @spacer %>    def failure(message)
-<%= @spacer %>      fail Failure, message
 <%= @spacer %>    end
 <%= @spacer %>  end
 

@@ -14,9 +14,11 @@ describe PunchDomain do
     Sandbox.() {
       @config = Punch::Config.new('lib', 'test', 'dom', 'sen', 'ent', 'ser', 'plg')
       @domain = build_sample_domain
+      log = []
       Punch.stub :config, @config do
-        service.(@domain)
+        log = service.(@domain)
       end
+      refute log.empty?
       # payload = [
       #   "lib/dom/ser/admin_lock_user.rb",
       #   "test/dom/ser/test_admin_lock_user.rb",
@@ -27,7 +29,7 @@ describe PunchDomain do
       #   "lib/dom.rb",
       # ]
       # puts "-= Custom Configuration =-"
-      # print_folders
+      # puts log
       # print_content(*payload)
     }
   end

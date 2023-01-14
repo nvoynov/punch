@@ -1,6 +1,21 @@
 ## [Unreleased]
 
-## [0.6.0] - 2023-01-09
+TODO
+
+- [ ] `$ punch domain` should write log, like CLI does; it will require translation from Model::Parameter into string like CLI accepts
+- [ ] `Ranch` for additional helper code for storing and filtering objects in-memory that will serve for experiments and maybe MVP sort to eliminate efforts of storage layer development
+
+## [0.6.1] - 2023-01-14
+
+- improved CLI by logging exception backtrace
+- improved `CLI::BANNER`
+- improved `Punch.config` for better `punch.yml`
+- improved `PunchDomain` by returning log like other punchers
+- improved `$ punch basics` by accounting for `domain` setting
+- optimized most of `assets/samples`
+- updated README.md with `punch_users` statistics
+
+## [0.6.0] - 2023-01-10
 
 - added `Punch::DSL::Plugin` and `DSL::Builder#plugin`
 - added `PunchPlugin` service that creates `config.rb` with plugin holders
