@@ -23,8 +23,12 @@ module Punch
         holders = if File.exist?(configrb)
           storage.read(configrb)
         else
+          incl = [config.domain, config.plugins]
+            .reject(&:empty?)
+            .map(&:capitalize)
+            .join('::')
           @log.concat storage.write(configrb, CONFIGRB_HEADER % [
-            config.plugins, config.plugins.capitalize])
+            config.plugins, incl])
           ''
         end
         declare = "#{model.const}Holder = #{model.const}.plugin"

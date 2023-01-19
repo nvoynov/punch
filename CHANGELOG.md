@@ -2,8 +2,19 @@
 
 TODO
 
-- [ ] `$ punch domain` should write log, like CLI does; it will require translation from Model::Parameter into string like CLI accepts
-- [ ] `Ranch` for additional helper code for storing and filtering objects in-memory that will serve for experiments and maybe MVP sort to eliminate efforts of storage layer development
+- [ ] mention the ability to generate SRS stub for Marko in Marko!
+
+## [0.6.2] - 2023-01-19
+
+- fixed typo in `$ punch status`
+- added `README.md` and `Dockerfile` for `$ punch new`
+- improved `PunchPlugin` for using `domain` setting
+- improved samples
+  - entities require `entity` instead of `../basics`
+  - services require `service` instead of `../basics`
+  - services `intitialize` equipped with yardoc
+  - all tests are skipped by `skip "UNDER CONSTRUCTION"`
+- improved README.md
 
 ## [0.6.1] - 2023-01-14
 

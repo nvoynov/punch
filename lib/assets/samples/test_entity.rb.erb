@@ -2,9 +2,10 @@ require_relative "<%= @model.test_helper %>"
 include <%= @model.namespace %>
 
 describe <%= @model.const %> do
-  let(:entity) { <%= @model.const %>.new(<%= @model.parameters %>) }
+  # let(:entity) { <%= @model.const %>.new(<%= @model.parameters %>) }
 
   it {
-    assert entity
+    # assert entity
+    skip "UNDER CONSTRUCTION"
   }
 end

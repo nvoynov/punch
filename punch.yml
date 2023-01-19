@@ -1,7 +1,0 @@
-lib: lib
-test: test
-domain: ''
-sentries: sentries
-entities: entities
-services: services
-plugins: plugins

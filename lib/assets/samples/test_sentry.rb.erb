@@ -1,12 +1,14 @@
 require_relative "<%= @model.test_helper %>"
 
 describe <%= @model.const %> do
+  let(:subject) { <%= @model.const %> }
   # @todo provide valid and wrong samples here
   let(:proper) { [nil, -1, 0, 1, "", "string", Object.new] }
   let(:faulty) { [nil, -1, 0, 1, "", "string", Object.new] }
 
   it {
-    proper.each{|arg| assert_equal arg, <%= @model.const %>.(arg) }
-    faulty.each{|arg| assert_raises(ArgumentError) { <%= @model.const %>.(arg) }}
+    skip "UNDER CONSTRUCTION"
+    proper.each{|arg| assert_equal arg, subject.(arg) }
+    faulty.each{|arg| assert_raises(ArgumentError) { subject.(arg) }}
   }
 end

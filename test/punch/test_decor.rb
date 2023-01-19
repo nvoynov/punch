@@ -73,6 +73,7 @@ class TestSourceDecor < Minitest::Test
     decor.properties
     decor.parameters
     decor.assignment
+    decor.yardoc
 
     model = ModelBuilder.(:dummy)
     decor = Factory.decorate(:entity, model)

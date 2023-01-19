@@ -9,7 +9,7 @@ Playing last year with [The Clean Architecture](https://blog.cleancoder.com/uncl
 - command-line interface for punching those blocks
 - simple domain DSL to express and "punch" domains
 
-You can find an example of a "punched" domain in **[punch_users](https://github.com/nvoynov/punch_users.git)** repository that could speak a bit for the Punch efficiency.
+You can find an example of a "punched" domain in [punch_users](https://github.com/nvoynov/punch_users.git) repository that could speak a bit for the Punch efficiency.
 
 - 85% of source files were "punched" and 15% were created manually;
 - 50% of Ruby LOC were "punched" and the other 50% were created manually.
@@ -263,15 +263,9 @@ README.md
 
 Looking through [sample.rb](https://github.com/nvoynov/punch/blob/master/lib/assets/domain/sample.rb), you can express your domain and then generate it with `dogen.rb` script.
 
-It seems very promising at the moment when besides the code generation you could generate help files, SRS, interfaces, or whatever you could generate from the domain described in sentries (domain, type), entities, users, and services.
+_Besides the domain code generation, you can use this DSL for "punching" other stuff like interfaces_ or whatever you want to generate from entities, services, plugins and actors.
 
-For the example, writing requirements I always elaborate on "Use Cases" and "Entities" sections of SRS, so my SRS can be easily expressed by the `Punch::DSL`
-
-### Having punched..
-
-I can see some situations when one need some more code for punched concepts, like creating database migrations or sort of case.
-
-At the moment, when you are "punching" concepts by CLI - you have `punch.log` that you can parse. Unfortunately, at the moment it's not the case for punching domains. But some code could be generated based on "punched" sources, fake entities, etc.
+For example, for my first "punched" app I generated whole dRuby interface (see [face.rb](https://github.com/nvoynov/punch/blob/master/app/druby/face.rb)); for my next SRS with [Marko](https://github.com/nvoynov/marko) I'll generate SRS-skeleton with actors, use cases, and entities.
 
 ## Development
 

@@ -8,27 +8,24 @@ describe PunchDomain do
   it 'must punch sample_domain' do
     Sandbox.() {
       domain = build_sample_domain
-      service.(domain)
+      log = service.(domain)
+      refute log.empty?
+      # puts "-= Default Configuration =-"
+      # payload = ["lib/config.rb"]
+      # puts log
+      # print_content(*payload)
     }
 
     Sandbox.() {
       @config = Punch::Config.new('lib', 'test', 'dom', 'sen', 'ent', 'ser', 'plg')
-      @domain = build_sample_domain
+      domain = build_sample_domain
       log = []
       Punch.stub :config, @config do
-        log = service.(@domain)
+        log = service.(domain)
       end
       refute log.empty?
-      # payload = [
-      #   "lib/dom/ser/admin_lock_user.rb",
-      #   "test/dom/ser/test_admin_lock_user.rb",
-      #   "lib/dom/plg.rb",
-      #   "lib/dom/plg/secrets.rb",
-      #   "test/dom/plg/test_secrets.rb",
-      #   "lib/dom/sen.rb",
-      #   "lib/dom.rb",
-      # ]
       # puts "-= Custom Configuration =-"
+      # payload = ["lib/dom/config.rb", "lib/dom.rb"]
       # puts log
       # print_content(*payload)
     }

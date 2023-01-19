@@ -1,6 +1,6 @@
 <% @spacer = '  ' * (@model.namespace.split(/::/).size - 1) -%>
 # frozen_string_literal: true
-require_relative "../basics"
+require_relative "entity"
 
 <%= @model.open_namespace %>
 <%= @spacer %>  # <%= @model.desc %>

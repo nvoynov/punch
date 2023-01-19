@@ -3,9 +3,11 @@ include <%= @model.namespace %>
 
 describe <%= @model.const %> do
   let(:service) { <%= @model.const %> }
-  let(:payload) { {<%= @model.arguments %>} }
+  # let(:payload) { {<%= @model.arguments %>} }
 
   it {
+    skip "UNDER CONSTRUCTION"
+    service.()
     # there are no plugins implemented at the moment
     # so its behaviour should be stubbded and mocked
     #

@@ -111,6 +111,13 @@ module Punch
       }.join(?\n)
     end
 
+    def yardoc
+      params.map{|param|
+        param_type = param.sentry? ? param.sentry.capitalize : 'Object'
+        "# @param #{param.name} [#{param_type}] #{param.desc}"
+      }.push("# @return [@todo] what?").join(?\n)
+    end
+
     def parameters
       params.map{|param|
         ary = [param.name]

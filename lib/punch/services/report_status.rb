@@ -68,7 +68,7 @@ module Punch
 
         dirs = payload.keys
         summary = <<~EOF
-          Looking though #{dirs.map{"'#{_1}'"}.join(', ')} directories..
+          Looking through #{dirs.map{"'#{_1}'"}.join(', ')} directories..
 
           - #{total} sources, #{pnch} "punched" (#{wild} remain "punched")
           - #{sloc} SLOC, #{blnk} blank and #{cmnt} comment lines

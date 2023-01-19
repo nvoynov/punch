@@ -6,4 +6,8 @@ class Test<%= @model.const %> < Minitest::Test
     <%= @model.const %>.new(<%= @model.arguments %>)
   end
 
+  def test_some_method
+    skip "UNDER CONSTRUCTION"
+  end
+
 end
