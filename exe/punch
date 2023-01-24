@@ -1,11 +1,17 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
+require "logger"
 require "punch/cli"
 require "punch/plugins"
 include Punch
 
-LoggerPlug.object = Punch::Logger.new('punch.log')
+LoggerPlug.object = Logger.new('punch.log',
+  datetime_format: '%Y-%m-%d %H:%M:%S',
+  formatter: proc{|severity, datetime, progname, msg|
+    "[#{datetime}] #{severity.ljust(5)}: #{msg}\n"
+  }
+)
 
 if ARGV.empty?
   CLI.banner

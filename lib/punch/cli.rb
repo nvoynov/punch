@@ -145,7 +145,7 @@ module Punch
       logger.error e.backtrace
       puts <<~EOF
         #{e.message} (#{e.class.name})
-        See '#{logger.device}' for details
+        See 'punch.log' for details
       EOF
     end
 

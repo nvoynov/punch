@@ -1,8 +1,9 @@
 ## [Unreleased]
 
-TODO
+## [0.6.3] - 2023-01-24
 
-- [ ] mention the ability to generate SRS stub for Marko in Marko!
+- removed `plugin/logger`, replaced by regular Ruby Logger
+- added few extra sample generators based on `DSL::Domain`
 
 ## [0.6.2] - 2023-01-19
 
@@ -12,7 +13,7 @@ TODO
 - improved samples
   - entities require `entity` instead of `../basics`
   - services require `service` instead of `../basics`
-  - services `intitialize` equipped with yardoc
+  - services `initialize` equipped with yardoc
   - all tests are skipped by `skip "UNDER CONSTRUCTION"`
 - improved README.md
 
