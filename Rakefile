@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+require "rake"
+sancho = File.expand_path("../sancho", __dir__)
+sancho = File.join(sancho, 'lib')
+Rake.application.rake_require "tasks", [sancho]
+
 require "bundler/gem_tasks"
 require "rake/testtask"
 

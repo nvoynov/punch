@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="keywords" content="ruby, source-code-generator, interactor, service, entity, plugin, business-logic-layer, the-clean-architecture, domain-driven-design" />
+  <title>Punch Readme</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="css/styles.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<p class="navbar">
+<span class="smallcaps">=
+<strong><code>Punch.(Domain.(DSL))</code></strong> = <a
+href="readme.html">Readme</a> ~ <a href="changelog.html">Changelog</a> ~
+<a href="story.html">Story</a> ~ <a
+href="https://github.com/nvoynov/punch">Github</a></span>
+</p>
+<header id="title-block-header">
+<h1 class="title">Punch Readme</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#user-stories" id="toc-user-stories">User Stories</a></li>
+<li><a href="#installation" id="toc-installation">Installation</a></li>
+<li><a href="#usage" id="toc-usage">Usage</a>
+<ul>
+<li><a href="#quickstart" id="toc-quickstart">Quickstart</a></li>
+<li><a href="#configuration"
+id="toc-configuration">Configuration</a></li>
+<li><a href="#logging" id="toc-logging">Logging</a></li>
+<li><a href="#punch-service" id="toc-punch-service">“punch
+service”</a></li>
+<li><a href="#punch-entity" id="toc-punch-entity">“punch
+entity”</a></li>
+<li><a href="#punch-plugin" id="toc-punch-plugin">“punch
+plugin”</a></li>
+<li><a href="#punch-preview" id="toc-punch-preview">“punch
+preview”</a></li>
+<li><a href="#punch-status" id="toc-punch-status">“punch
+status”</a></li>
+<li><a href="#punch-samples" id="toc-punch-samples">“punch
+samples”</a></li>
+<li><a href="#punch-basics" id="toc-punch-basics">“punch
+basics”</a></li>
+<li><a href="#punch-domain" id="toc-punch-domain">“punch
+domain”</a></li>
+<li><a href="#app-design" id="toc-app-design">App design</a></li>
+</ul></li>
+<li><a href="#development" id="toc-development">Development</a></li>
+<li><a href="#contributing" id="toc-contributing">Contributing</a></li>
+</ul>
+</nav>
+<p>The Punch’s basic idea is to provide a clean robust frame for domain
+business logic and bring efficiency to the design process.</p>
+<p>Playing last year with <a
+href="https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html">The
+Clean Architecture</a> I found it just a really amazing tool, but it
+also was a bit tiresome because of the necessity to create and require
+entities and services sources separately. That’s why I designed Punch,
+which provides:</p>
+<ul>
+<li>three basic blocks - entity, service, and plugin</li>
+<li>source code templates for those blocks</li>
+<li>command-line interface for punching those blocks</li>
+<li>simple domain DSL to express and “punch” domains</li>
+</ul>
+<p>You can find an example of a “punched” domain in <a
+href="https://github.com/nvoynov/punch_users.git">punch_users</a>
+repository that could speak a bit for the Punch efficiency.</p>
+<ul>
+<li>85% of source files were “punched” and 15% were created
+manually;</li>
+<li>50% of Ruby LOC were “punched” and the other 50% were created
+manually.</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Location</th>
+<th style="text-align: left;">Total</th>
+<th>“Punched”</th>
+<th style="text-align: left;">SLOC</th>
+<th style="text-align: left;">Blank</th>
+<th style="text-align: left;">Comments</th>
+<th>Net Ruby LOC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">lib</td>
+<td style="text-align: left;">23 (17)</td>
+<td>13 (13)</td>
+<td style="text-align: left;">657 (329)</td>
+<td style="text-align: left;">102 (53)</td>
+<td style="text-align: left;">175 (93)</td>
+<td>380 (183)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">test</td>
+<td style="text-align: left;">17 (17)</td>
+<td>15 (16)</td>
+<td style="text-align: left;">363 (335)</td>
+<td style="text-align: left;">46 (38)</td>
+<td style="text-align: left;">45 (150)</td>
+<td>272 (147)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lib + test</td>
+<td style="text-align: left;">40 (34)</td>
+<td>28 (29)</td>
+<td style="text-align: left;">1020 (664)</td>
+<td style="text-align: left;">148 (91)</td>
+<td style="text-align: left;">220 (243)</td>
+<td>652 (330)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="user-stories">User Stories</h2>
+<p>Punch has started from just a few following stories that I hope
+clearly translate its premises and will still be relevant as the project
+goes further.</p>
+<p><strong>Architecture</strong> I want to design my code base in accord
+with The Clean Architecture principles, so it will be easy to write,
+read, test, and evolve.</p>
+<p><strong>Business logic</strong> I want to start as small as possible
+just with PORO business logic by adopting just a few core concepts
+(Service, Entity, Plugin) so that I will have a clean domain at the
+beginning. When my business logic is ready I’ll get to particular
+technologies (CLI, Web, API, Message Broker, Storage, external API,
+etc.)</p>
+<p><strong>Generators</strong> I want to have a few generators for my
+basic concepts (entities, services), that way I hope to boost my
+productivity and reduce mistakes through generating instead of writing
+manually.</p>
+<h2 id="installation">Installation</h2>
+<p>Install the gem and add to the application’s Gemfile by
+executing:</p>
+<pre><code>$ bundle add punch --git https://github.com/nvoynov/punch.git</code></pre>
+<h2 id="usage">Usage</h2>
+<h3 id="quickstart">Quickstart</h3>
+<p>Just run <code>$ punch</code> and see banner for basic usage, create
+a new Punch Project by <code>$ punch new DIRECTORY</code>, and run a few
+<code>$ punch preview</code> commands inside the
+<code>DIRECTORY</code>.</p>
+<h3 id="configuration">Configuration</h3>
+<p>Punch can be configured through <code>punch.yml</code> file that can
+be found inside your punch project. One can point out directories for
+punching based on a particular concept. The default settings are:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode yml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lib</span><span class="kw">:</span><span class="at"> lib</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span><span class="kw">:</span><span class="at"> test</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">domain</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">sentries</span><span class="kw">:</span><span class="at"> sentries</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">entities</span><span class="kw">:</span><span class="at"> entities</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span><span class="at"> services</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plugins</span><span class="kw">:</span><span class="at"> plugins</span></span></code></pre></div>
+<p>In accordance with these settings <code>Punch</code> will generate
+code inside <code>lib</code> and tests inside <code>test</code>. <a
+href="#sentry">Sentries</a> will be punched into
+<code>lib/sentries.rb</code>, entities and services respectively into
+<code>lib/entities</code> and <code>lib/services</code>; concepts
+namespaces will be <code>Entities</code>, <code>Services</code>, and
+<code>Plugins</code></p>
+<p>When you change <code>domain</code> settings as
+<code>domain: domain</code>, code will be placed to
+<code>lib/domain</code>. Assuming running the
+<code>$ punch service sign_in email password</code> command Punch will
+generate</p>
+<ul>
+<li><code>lib/domain/services/sing_in.rb</code></li>
+<li><code>lib/domain/services.rb~</code> (require
+“services/sign_in”)</li>
+<li><code>test/domain/services/test_sing_in.rb</code><br />
+</li>
+<li><code>Domain::Services</code> will be the service namespace</li>
+</ul>
+<p>You can go even further and run
+<code>$ punch service user/sign_in email password</code> and it this
+case if will affect output as:</p>
+<ul>
+<li><code>lib/domain/services/user/sing_in.rb</code></li>
+<li><code>lib/domain/services/user.rb~</code> (require
+“user/sign_in”)</li>
+<li><code>test/domain/services/user/test_sing_in.rb</code><br />
+</li>
+<li><code>Domain::Services::User</code> will be the service
+namespace</li>
+</ul>
+<h3 id="logging">Logging</h3>
+<p>Punch logs all commands and errors in <code>punch.log</code>
+file.</p>
+<pre><code>[2023-01-12 15:11:34 +0200] INFO : punch queries
+[2023-01-12 15:11:34 +0200] INFO : lib/users/plugins/queries.rb, lib/users/plugins.rb~, lib/users/config.rb~, test/users/plugins/test_queries.rb</code></pre>
+<h3 id="punch-service">“punch service”</h3>
+<p>The <code>$ punch service NAME [PARM] [PARAM] ...</code> command will
+punch a new service and its test into your “punched” project. Code will
+be generated only when the current folder contains
+<code>punch.yml</code>.</p>
+<p>The output of the command will be the list of created or modified
+source files by the command. It is safe enough to prevent you from
+losing important changes inside punched sources. So when you “punched”
+some source and then “re-punch” the same concept again, Punch will check
+was the content changed from its punched state. The command will be
+aborted for changed content, or the previous copy will be backed for
+“wild-punched” content.</p>
+<p>When you run something like
+<code>$punch service sign_up login password</code>, Punch will generate
+code according with service template, something like follows</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">module</span> <span class="dt">Services</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">class</span> <span class="dt">SignUp</span> <span class="kw">&lt;</span> <span class="dt">Service</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">def</span> initialize(login, password)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@login</span> <span class="kw">=</span> login</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@password</span> <span class="kw">=</span> password</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">def</span> call</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<p>The <code>login</code> and <code>password</code> parameters there
+could be passed in a few ways and the chosen way will affect for code
+generation output.</p>
+<ol type="1">
+<li>Finishing parameters with <code>:</code> will tell the Punch to
+generate keyword arguments, so <code>sign_up login: password:</code>
+will generate constructor declaration as
+<code>def initialize(login:, password:)</code></li>
+<li>Providing default values for parameters like
+<code>sign_up "login \"user\"" "password \"$ecret\""</code> will
+generate
+<code>def initialize(login = "user", password = "$ecret")</code></li>
+<li>In the same manner you can provided default values for keyword
+arguments -
+<code>sign_up "login: \"user\"" "password: \"$ecret\""</code> will
+generate
+<code>def initialize(login: "user", password: "$ecret")</code></li>
+<li>Positional and keyword arguments can be mixed together. Punch is
+advanced enough to place it into right order - positional first,
+positional with default values next, and keywords at the end.</li>
+</ol>
+<p>And finally we can meet the <a href="#punchsentry">Sentry</a>. For
+keyword arguments you can point a sentry, and being pointed for an
+argument, constructor will validate the argument with the provided
+sentry.</p>
+<p>Passing parameters as
+<code>sign_up login:login password:password</code> tell Punch to
+generate <code>login</code> and <code>password</code> sentries first,
+and then validate <code>login</code> and <code>secret</code> parameters
+inside constructor.</p>
+<p>In <code>sentries.rb</code> will be placed two new sentries unless
+they do not exist.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">MustbeLogin</span> <span class="kw">=</span> <span class="dt">Sentry</span><span class="at">.new</span>(<span class="wa">:login</span>, <span class="kw">...</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">MustbePassword</span> <span class="kw">=</span> <span class="dt">Sentry</span><span class="at">.new</span>(<span class="wa">:secret</span>, <span class="kw">...</span></span></code></pre></div>
+<p>The constructor became</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">def</span> initialize(login:, password:)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">@login</span> <span class="kw">=</span> <span class="dt">MustbeLogin</span><span class="kw">.</span>(login)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">@secret</span> <span class="kw">=</span> <span class="dt">MustbePassword</span><span class="kw">.</span>(password)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<p>Your new service being just “punched” is not ready to run because you
+need basic Service first (<code>class SignUp &lt; Service</code>). The
+<a href="#punch-basics">“Punch Basics”</a> section will explain the
+situation with basic concepts.</p>
+<h3 id="punch-entity">“punch entity”</h3>
+<p>The <code>$punch entity NAME [PARAM] [PARAM]..</code> command follows
+the same principles, but its default template also generates
+<code>attr_reader</code> for parameters. An example follows</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">module</span> <span class="dt">Entities</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">class</span> <span class="dt">User</span> <span class="kw">&lt;</span> <span class="dt">Entity</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">attr_reader</span> <span class="wa">:login</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="ot">attr_reader</span> <span class="wa">:secret</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">def</span> initialize(id:, login:, password:)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>      <span class="dv">super</span>(id)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@login</span> <span class="kw">=</span> <span class="dt">MustbeLogin</span><span class="kw">.</span>(login)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>      <span class="ot">@secret</span> <span class="kw">=</span> <span class="dt">MustbePassword</span><span class="kw">.</span>(password)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<h3 id="punch-plugin">“punch plugin”</h3>
+<p>The <code>punch plugin NAME [PARAM] [PARAM]..</code> command will
+“punch” Plugin, the command behavior is similar to
+<code>punch service/entity</code>. In addition it will create
+<code>config.rb</code> file with PluginHolder placed there.</p>
+<h3 id="punch-preview">“punch preview”</h3>
+<p>The <code>punch preview</code> command prints the generated code
+instead of write so you can preview before you punch.</p>
+<h3 id="punch-status">“punch status”</h3>
+<p>The <code>$ punch status</code> command provides you with basic
+information about “punched” sources, like how many sources you have
+punched and how many are still in the wild punched state.</p>
+<h3 id="punch-samples">“punch samples”</h3>
+<p>You can customize default Punch templates according to your
+particular purpose. The <code>$ punch samples</code> command will copy
+default templates into your project in <code>.punch/samples</code>
+folder and Punch will get templates from there. Those templates are just
+ERB based on Punch::SentryDecor and Punch::SourceDecor.</p>
+<h3 id="punch-basics">“punch basics”</h3>
+<p>Punch can provide you with its own basic concept it itself designed
+upon. The <code>$ punch basics</code> command will copy sources as
+follows. You can use those as a starter and evolve according to your
+needs.</p>
+<pre><code>lib/punch/basics/sentry.rb
+lib/punch/basics/entity.rb
+lib/punch/basics/service.rb
+lib/punch/basics/plugin.rb
+lib/punch/basics.rb
+lib/punch.rb</code></pre>
+<h4 id="punchsentry">Punch::Sentry</h4>
+<p><a
+href="https://github.com/nvoynov/punch/blob/master/lib/punch/basics/sentry.rb">Sentry</a>
+is a simple module with straight and only purpose - to ensure that
+argument is valid or raise failure otherwise.</p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dt">ShortString</span> <span class="kw">=</span> <span class="dt">Sentry</span><span class="at">.new</span>(<span class="wa">:str</span>, <span class="st">&quot;must be String[3..100]&quot;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>) <span class="kw">{|</span>v<span class="kw">|</span> v<span class="at">.is_a?</span>(<span class="dt">String</span>) <span class="kw">&amp;&amp;</span> v<span class="at">.size.between?</span>(<span class="dv">3</span>,<span class="dv">100</span>)<span class="kw">}</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="dt">ShortString</span><span class="kw">.</span>(<span class="st">&quot;string&quot;</span>) <span class="co"># =&gt; &quot;string&quot;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="dt">ShortString</span><span class="kw">.</span>(<span class="st">&quot;s&quot;</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; ArgumentError &quot;:str must be String[3..100]&quot;</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="dt">ShortString</span><span class="kw">.</span>(<span class="dv">nil</span>, <span class="wa">:name</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; ArgumentError &quot;:name must be String[3..100]&quot;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="dt">ShortString</span><span class="kw">.</span>(<span class="dv">nil</span>, <span class="vs">&#39;John Doe&#39;</span>, <span class="vs">&#39;Ups!&#39;</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># =&gt; ArgumentError &quot;:John Doe Ups!&quot;</span></span></code></pre></div>
+<h4 id="punchservice">Punch::Service</h4>
+<p><a
+href="https://github.com/nvoynov/punch/blob/master/lib/punch/basics/servie.rb">Service</a>
+is very basic class where one supposed to override <code>#call</code>
+method to do some job.</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">SingIn</span> <span class="kw">&lt;</span> <span class="dt">Service</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> intitialize(login, password)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@login</span> <span class="kw">=</span> login</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">@password</span> <span class="kw">=</span> password</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">def</span> call</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    user <span class="kw">=</span> storage<span class="at">.get</span>(<span class="dt">User</span>, <span class="wa">login: </span><span class="ot">@login</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fail</span> <span class="st">&quot;Wrong login or password&quot;</span> <span class="cf">unless</span> user</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fail</span> <span class="st">&quot;Wrong login or password&quot;</span> <span class="cf">unless</span> user<span class="at">.password</span> <span class="kw">==</span> password</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    user</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">end</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<h4 id="punchentity">Punch::Entity</h4>
+<p><a
+href="https://github.com/nvoynov/punch/blob/master/lib/punch/basics/entity.rb">Entity</a>
+is just minimal entity class with <code>id</code> attribute that passed
+nil becomes <code>SecureRandom.uuid</code></p>
+<h4 id="punchplugin">Punch::Plugin</h4>
+<p><a
+href="https://github.com/nvoynov/punch/blob/master/lib/punch/basics/plugin.rb">Plugin</a>
+is a simple mixin for your plugin interfaces - logic external to the
+domain. The mixin provides <code>plugin</code> method that creates a new
+module that serves for plugin holder</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># store interface</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">Store</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extend</span> <span class="dt">Plugin</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># skipped..</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># -= config.rb =-</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># store holder</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="dt">StoreHolder</span> <span class="kw">=</span> <span class="dt">Store</span><span class="at">.plugin</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># in-memory store implementation</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">InMemoryStore</span> <span class="kw">&lt;</span> <span class="dt">Store</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># skipped..</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co"># change holder</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="dt">StoreHolder</span><span class="at">.plugin</span> <span class="dt">InMemoryStore</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co"># get access to holder object</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>store <span class="kw">=</span> <span class="dt">StoreHolder</span><span class="at">.object</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>store<span class="at">.q</span>(<span class="dt">Article</span>, <span class="wa">where: </span><span class="kw">{</span><span class="wa">name: </span><span class="ss">/Ruby/</span><span class="kw">}</span>)</span></code></pre></div>
+<p>Having such “holder” you can use it for sort of dependency
+injection</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode ruby"><code class="sourceCode ruby"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="st">&quot;forwardable&quot;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="st">&quot;basics&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">require</span> <span class="st">&quot;config&quot;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="cf">class</span> <span class="dt">UserSignUp</span> <span class="kw">&lt;</span> <span class="dt">Service</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">extend</span> <span class="dt">Forwardable</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  def_delegator <span class="wa">:StorageHolder</span>, <span class="wa">:object</span>, <span class="wa">:storage</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  def_delegator <span class="wa">:SecretsHolder</span>, <span class="wa">:object</span>, <span class="wa">:secrets</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a> <span class="co"># skipped ..</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code></pre></div>
+<h3 id="punch-domain">“punch domain”</h3>
+<p>Punch goes a bit further than just a source code generator for
+services and entities and provides DSL for describing domains of those
+things.</p>
+<p>The <code>$ punch domain</code> command create
+<code>.punch/domain</code> folder with a few Ruby sources inside your
+punched project:</p>
+<pre><code>sample.rb
+domain.rb
+dogen.rb
+README.md</code></pre>
+<p>Looking through <a
+href="https://github.com/nvoynov/punch/blob/master/lib/assets/domain/sample.rb">sample.rb</a>,
+you can express your domain and then generate it with
+<code>dogen.rb</code> script.</p>
+<p><strong>Besides the domain code generation</strong>, you can use
+domain metadata for “punching” whatever you want to generate from
+entities, services, plugins, and actors. For example, I going to
+generate my next SRS skeleton for <a
+href="https://github.com/nvoynov/marko">Marko</a> with actors, use
+cases, and entities.</p>
+<h3 id="app-design">App design</h3>
+<p>The <a
+href="https://github.com/nvoynov/punch_orders">punch_orders</a>
+repository provides an example of how to design apps with a business
+logic layer. You can find there an “Orders Domain” with a few actors,
+entities, and services as well as three apps on different tech (dRuby,
+Rack, and RabbitMQ) that share the domain business logic, presenters,
+and data store.</p>
+<h2 id="development">Development</h2>
+<p>After checking out the repo, run <code>bin/setup</code> to install
+dependencies. Then, run <code>rake test</code> to run the tests. You can
+also run <code>bin/console</code> for an interactive prompt that will
+allow you to experiment.</p>
+<p>To install this gem onto your local machine, run
+<code>bundle exec rake install</code>. To release a new version, update
+the version number in <code>version.rb</code>, and then run
+<code>bundle exec rake release</code>, which will create a git tag for
+the version, push git commits and the created tag, and push the
+<code>.gem</code> file to <a
+href="https://rubygems.org">rubygems.org</a>.</p>
+<h2 id="contributing">Contributing</h2>
+<p>Bug reports and pull requests are welcome on GitHub at
+https://github.com/[USERNAME]/punch.</p>
+<div id="footer">
+<hr />
+<p>© 2022-2023 <a href="http://nvoynov.github.io/">nvoynov</a></p>
+</div>
+</body>
+</html>

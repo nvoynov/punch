@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="dcterms.date" content="2023-01-26" />
+  <title>Punch Story</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="css/styles.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<p class="navbar">
+<span class="smallcaps">=
+<strong><code>Punch.(Domain.(DSL))</code></strong> = <a
+href="readme.html">Readme</a> ~ <a href="changelog.html">Changelog</a> ~
+<a href="story.html">Story</a> ~ <a
+href="https://github.com/nvoynov/punch">Github</a></span>
+</p>
+<header id="title-block-header">
+<h1 class="title">Punch Story</h1>
+<p class="date">2023-01-26</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#cleon-and-dogen" id="toc-cleon-and-dogen">Cleon and
+Dogen</a></li>
+<li><a href="#reality-check" id="toc-reality-check">Reality
+Check</a></li>
+<li><a href="#modern-punch" id="toc-modern-punch">Modern Punch</a></li>
+</ul>
+</nav>
+<p>The Punch story began somewhere in November 2021 when I got the
+feeling that playing Business Analyst last ten years, I lost the reality
+of modern software design and construction, and to dispel that feeling
+so took some time off to refresh my expertise in the subject.</p>
+<p>I was interested in distributed systems, message brokers,
+event-sourcing, CQRS, etc. so decided to go for the distributed back-end
+of microservices. But before touching techs there, I intended to have
+<em>“clean” and “screaming”</em> microservices and started with just the
+business logic layer.</p>
+<h3 id="cleon-and-dogen">Cleon and Dogen</h3>
+<p>Enforced with The Clean Architecture I build <em>Cleon Gem</em>,
+which gave me the basic frame of services, entities, and gateways. Tired
+of manually copying sources for the next app, I added a simple CLI to
+clone the frame into a new gem where I was supposed to design the
+business logic of the app further.</p>
+<p>Further being curious about the idea of code generation, I created a
+simple DSL for describing domains in terms of services and entities.
+This idea was shaped into Dogen Gem (domain generator.) and my new flow
+became 1) describe the domain, 2) generate domain skeleton sources, and
+finally 3) design business logic manually inside created and required
+sources. So at this stage, Cleon provided me with core concepts of
+services and entities, whereas Dogen provided me with domain DSL and
+code generation. I was pretty happy with that two.</p>
+<h3 id="reality-check">Reality Check</h3>
+<p>I got a probation period in a development company and one of the
+reasons why they looked to my side was my Cleon gem. The company team
+worked with bare applications and the idea of packing business logic
+into gems seemed just extraneous to them. And now I am also curious why
+I added this constraint at all :)</p>
+<p>It was quite an exciting time when I finally saw a few real
+microservice codebases and API Gateway, played a bit with Docker, tried
+development in containers, and met RabbitMQ… but it was not the right
+place for me.</p>
+<h3 id="modern-punch">Modern Punch</h3>
+<p>By the impact of and during that probation period, I designed <a
+href="https://github.com/nvoynov/punch">Punch</a> that replaced Cleon
+and eliminated that extraneous constraint of having Gem.</p>
+<p>Finished with redesigning Clerq into Marko, at the beginning of 2023
+I merged Dogen into Punch. Having played with it for a few weeks I can
+say that my next app will start from <code>$ punch new</code> and the
+following step will be designing the domain with DSL.</p>
+<div id="footer">
+<hr />
+<p>© 2022-2023 <a href="http://nvoynov.github.io/">nvoynov</a></p>
+</div>
+</body>
+</html>

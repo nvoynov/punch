@@ -27,13 +27,11 @@ You can find an example of a "punched" domain in [punch_users](https://github.co
 - 85% of source files were "punched" and 15% were created manually;
 - 50% of Ruby LOC were "punched" and the other 50% were created manually.
 
-```
 Location   Total   "Punched" SLOC       Blank    Comments  Net Ruby LOC
 ---------- ------- --------- ---------- -------- --------- ------------
 lib        23 (17) 13 (13)   657 (329)  102 (53) 175 (93)  380 (183)
 test       17 (17) 15 (16)   363 (335)  46 (38)  45 (150)  272 (147)
 lib + test 40 (34) 28 (29)   1020 (664) 148 (91) 220 (243) 652 (330)
-```
 
 ## User Stories
 
@@ -127,7 +125,7 @@ The `login` and `password` parameters there could be passed in a few ways and th
 3. In the same manner you can provided default values for keyword arguments - `sign_up "login: \"user\"" "password: \"$ecret\""` will generate `def initialize(login: "user", password: "$ecret")`
 4. Positional and keyword arguments can be mixed together. Punch is advanced enough to place it into right order - positional first, positional with default values next, and keywords at the end.
 
-And finally we can meet the [Sentry](#sentry). For keyword arguments you can point a sentry, and being pointed for an argument, constructor will validate the argument with the provided sentry.
+And finally we can meet the [Sentry](#punchsentry). For keyword arguments you can point a sentry, and being pointed for an argument, constructor will validate the argument with the provided sentry.
 
 Passing parameters as `sign_up login:login password:password` tell Punch to generate `login` and `password` sentries first, and then validate `login` and `secret` parameters inside constructor.
 
