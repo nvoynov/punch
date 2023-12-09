@@ -17,7 +17,7 @@ module Punch
         return conf
       end
       body = File.read(CONFIG)
-      obj = Psych.load([head, body].join, freeze: true)
+      obj = Psych.load([head, body].join, permitted_classes: [Config, Symbol], freeze: true)
       obj.is_a?(Config) ? obj : conf # test for faulty load result
     end
 

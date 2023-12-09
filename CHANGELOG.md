@@ -4,6 +4,10 @@ title: Punch Changelog
 
 ## [Unreleased]
 
+## [0.6.4] - 2023-12-09
+
+- moved to Ruby 3.2.2
+
 ## [0.6.3] - 2023-01-24
 
 - removed `plugin/logger`, replaced by regular Ruby Logger

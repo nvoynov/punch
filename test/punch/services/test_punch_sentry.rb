@@ -47,7 +47,7 @@ describe PunchSentry do
   end
 end
 
-class PunchSentry
+class Punch::Services::PunchSentry
   public_class_method :new
   public :storage, :punch, :render, :declared?, :declared
   attr_accessor :source, :test
