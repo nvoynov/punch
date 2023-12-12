@@ -4,9 +4,12 @@ title: Punch Changelog
 
 ## [Unreleased]
 
-## [0.6.4] - 2023-12-09
+## [0.6.4] - 2023-12-12
 
-- moved to Ruby 3.2.2
+- moved to Ruby 3.2.2 (Psych and Tests)
+- added .dockerignore
+- added doker.rake
+- changed Dockerfile
 
 ## [0.6.3] - 2023-01-24
 

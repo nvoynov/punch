@@ -1,0 +1,12 @@
+# Ignore all
+*
+
+# Allow sources
+!/exe/service.rb
+!/app
+!/lib
+# !Gemfile
+# !Gemfile.lock
+
+# Ignore inside sources
+**/*~

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
-
+require "rake"
 require "rake/testtask"
+Rake.application.rake_require "docker", ["."]
 
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"
