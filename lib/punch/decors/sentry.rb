@@ -6,7 +6,8 @@ module Punch
     class Sentry < Decor
 
       def const
-        PREFIX + name.split(?_).map(&:capitalize).join
+        str = name == name.upcase ? name : name.split(?_).map(&:capitalize).join
+        PREFIX + str
       end
 
       def namespace

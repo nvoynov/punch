@@ -58,7 +58,7 @@ module Punch
       end
 
       def tstrb(name)
-        [ conf.lib, conf.domain, conf.sentries, 'test_' + name
+        [ conf.test, conf.domain, conf.sentries, 'test_' + name
         ].reject(&:empty?)
           .then{ File.join(_1) + '.rb' }
       end

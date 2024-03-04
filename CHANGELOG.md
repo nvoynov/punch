@@ -4,6 +4,19 @@ title: Punch Changelog
 
 ## [Unreleased]
 
+TODO
+
+- [ ] assets/samples tests
+- [ ] PunchXyz tests for proper log, to avoid the necessity of 0.7.1 :)
+- [ ] test_cli.rb under "bundle exec rake test" with CLEAN console
+- [ ] test_exe.rb under "bundle exec rake test" with CLEAN console
+
+## [0.7.1] - 2024-03-04
+
+- fixed Sentry decorator for CAPITAL case Uuid instead of UUID
+- fixed PunchSentries that punched tests under lib/sentries/test_sentry.rb
+- fixed PunchModel that log lib/services.rb~ punching the first service
+
 ## [0.7.0] - 2024-03-04
 
 A few weeks ago I finished the first commercial backend for a small domain of one actor, a dozen services, four entities, and three plugins. The domain was "punched" using Punch::DSL; bumped in a few inconveniences that were fixed by this release.

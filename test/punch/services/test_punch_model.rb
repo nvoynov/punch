@@ -36,7 +36,7 @@ class TestPunchModel < Minitest::Test
     model = Dummy.models.find{|e| e.params.size > 0}
     Sandbox.() {
       log = service.(model, :entity, 'models')
-      assert_equal 5, log.size # plus folders
+      assert_equal 7, log.size # plus folders
       log = service.(model, :entity, 'models')
       assert_equal 5, log.size # plus backup
 

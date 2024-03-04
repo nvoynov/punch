@@ -29,7 +29,7 @@ module Punch
         sentries = @model.params.select(&:sentry?)
           .map(&:sentry).uniq
           .map{|e| Models::Sentry.new(name: e) }
-        PunchSentries.(sentries)
+        @log.concat PunchSentries.(sentries)
       end
 
       def punch
@@ -48,8 +48,8 @@ module Punch
         source = store.exist?(reqrb) ? store.read(reqrb) : ''
         reqstr = "require_relative '%s'" % File.join(@location, @model.name)
         return if source =~ %r{reqstr}
-        store.append(reqrb, reqstr)
-        @log << reqrb + '~'
+        log = store.exist?(reqrb) ? store.append(reqrb, reqstr) : store.write(reqrb, reqstr)
+        @log.concat log 
       end
 
       def getrb(head, tail = @model.name)
