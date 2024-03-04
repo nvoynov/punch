@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    punch (0.6.4)
+    punch (0.7.0)
 
 GEM
   remote: https://rubygems.org/
@@ -10,12 +10,13 @@ GEM
     rake (13.0.6)
 
 PLATFORMS
+  arm64-darwin-23
   x64-mingw-ucrt
   x64-mingw32
   x86_64-linux
 
 DEPENDENCIES
-  minitest (~> 5.0)
+  minitest (~> 5.17)
   punch!
   rake (~> 13.0)
 

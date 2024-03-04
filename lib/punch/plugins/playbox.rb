@@ -3,10 +3,13 @@ require_relative "../basics"
 require_relative "../config"
 require_relative "hashed"
 require "fileutils"
+require "forwardable"
 
 module Punch
 
   class Playbox
+    extend Forwardable
+    def_delegator :ConfigHolder, :object, :conf
     extend Plugin
     include FileUtils
     include Hashed
@@ -19,7 +22,7 @@ module Punch
     end
 
     def punch_home?
-      File.exist?(Punch::CONFIG) || File.exist?('Gemfile')
+      File.exist?(Punch::CONF) || File.exist?('Gemfile')
     end
 
     SAMPLES = '.punch/samples'.freeze
@@ -49,9 +52,9 @@ module Punch
       basicsrb = 'lib/punch/basics.rb'
       File.write(basicsrb, sources.map(&fn).join(?\n))
       File.write('lib/punch.rb', "require_relative \"punch/basics\"")
-      location = [config.lib, config.domain, 'basics.rb'].reject(&:empty?)
+      location = [conf.lib, conf.domain, 'basics.rb'].reject(&:empty?)
       basicsrb = File.join(*location)
-      punchrb = config.domain.empty? ? "punch" : "../punch"
+      punchrb = conf.domain.empty? ? "punch" : "../punch"
       content = <<~EOF
         require_relative "#{punchrb}"
 
@@ -142,12 +145,13 @@ module Punch
       File.open(name, 'a') do |f|
         f.puts string
       end
+      [name + '~']
     end
 
     # @param model [Symbol]
     # @return [Array<String>] array of two samples, where the first for source and the second for test
     def samples(model)
-      payload = case model
+      payload = case model.to_sym
         when :sentry;  ['sentry.rb.erb', 'test_sentry.rb.erb']
         when :entity;  ['entity.rb.erb', 'test_entity.rb.erb']
         when :service; ['service.rb.erb', 'test_service.rb.erb']
@@ -160,9 +164,9 @@ module Punch
 
     protected
 
-    def config
-      @config ||= Punch.config
-    end
+    # def config
+    #   @config ||= Punch.config
+    # end
 
     def punch_home!
       fail Failure, "Punch folder required!"
@@ -173,7 +177,8 @@ module Punch
       Dir.chdir(dir) {
         src = File.join(Punch.starter, '.')
         cp_r src, Dir.pwd
-        Punch.config # just create punch.yml
+        # Punch.config # just create punch.yml
+        conf
         Dir.glob("#{Dir.pwd}/**/*")
       }
     end

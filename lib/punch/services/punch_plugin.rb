@@ -1,40 +1,34 @@
-# frozen_string_literal: true
-
-require_relative "punch_source"
+require_relative 'service'
 
 module Punch
   module Services
 
-    # In differs from the PunchSource by punching "config.rb" with plugin hoders
-    class PunchPlugin < PunchSource
+    class PunchPlugin < PunchModel
+      # @param model [Models::Plugin]
+      def initialize(model)
+        super(model, :plugin, conf.plugins)
+      end
 
-      CONFIGRB = 'config.rb'.freeze
-      # @todo it should be also erb template, and maybe basic.rb
-      CONFIGRB_HEADER = <<~EOF.freeze
-        require_relative "%s"
-        include %s
+      # @todo PunchModel should not punch sentries
+      #   but PunchEntity and PunchService sould!
+      def call
+        @log = []
+        punch
+        @log
+      end
 
-      EOF
+      protected
 
-      def requirerb(model)
-        super(model)
-        location = [config.lib, config.domain, CONFIGRB].reject(&:empty?)
-        configrb = File.join(*location)
-        holders = if File.exist?(configrb)
-          storage.read(configrb)
-        else
-          incl = [config.domain, config.plugins]
-            .reject(&:empty?)
-            .map(&:capitalize)
-            .join('::')
-          @log.concat storage.write(configrb, CONFIGRB_HEADER % [
-            config.plugins, incl])
-          ''
-        end
-        declare = "#{model.const}Holder = #{model.const}.plugin"
-        return if holders =~ %r{#{declare}}
-        storage.append(configrb, declare)
-        @log << configrb + '~'
+      def requirerb
+        # the same part as for PunchModel
+        source = store.exist?(reqrb) ? store.read(reqrb) : ''
+        reqstr = "require_relative '%s'" % File.join(@location, @model.name)
+        return if source =~ %r{reqstr}
+        # but for plugin there should be also PluginHodler = Plugin.plugin
+        hldstr = "#{@model.const}Holder = #{@model.const}.plugin"
+        @log.concat "#{reqstr}\n#{hldstr}".then{|str|
+          store.exist?(reqrb) ? store.append(reqrb, str) : store.write(reqrb, str)
+        }
       end
     end
 

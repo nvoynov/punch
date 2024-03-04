@@ -4,6 +4,22 @@ title: Punch Changelog
 
 ## [Unreleased]
 
+## [0.7.0] - 2024-03-04
+
+A few weeks ago I finished the first commercial backend for a small domain of one actor, a dozen services, four entities, and three plugins. The domain was "punched" using Punch::DSL; bumped in a few inconveniences that were fixed by this release.
+
+- designed new model based on Data class
+- designed new DSL for Data class
+- designed new decorators - no more paths calculating stuff
+- designed new [entity sample](lib/punch/assets/samples/entity.rb.erb) based on Ruby 3.2 Data class
+- desgined new PunchSentries service
+- desgined new PunchModel service (paths calculating stuff moved here) with PunchEntity, PunchService, PunchPlugin descendants
+- designed new Config based on Data
+- decision to use positional or keyword arguments moved into samples/\*.rb.erb - one could replace `@model.keyword_params` for `@model.regular_params` (see [model decorator](lib/punch/decors/model.rb) for other methods); can't see the reson to use different approach in one project
+- removed the ability of using nested folders for generated concepts; invoke `$ punch new service user/crate-order` will generate `lib/domain/services/user_create_order.rb`
+- removed extra `lib/punch/basic/entity.rb`
+- simplified plugin and test_plugin samples
+
 ## [0.6.4] - 2023-12-12
 
 - moved to Ruby 3.2.2 (Psych and Tests)

@@ -1,15 +1,25 @@
-<% @spacer = '  ' * (@model.namespace.split(/::/).size - 1) -%>
 # frozen_string_literal: true
-require_relative "entity"
+require 'securerandom'
 
 <%= @model.open_namespace %>
-<%= @spacer %>  # <%= @model.desc %>
-<%= @spacer %>  class <%= @model.const %> < Entity
-<%= @model.properties.lines.map{"#{@spacer}    #{_1}"}.join %>
-<%= @spacer %>    def initialize(id: nil, <%= @model.parameters %>)
-<%= @spacer %>      super(id)
-<%= @model.assignment.lines.map{"#{@spacer}      #{_1}"}.join %>
-<%= @spacer %>    end
-<%= @spacer %>  end
+
+%
+% indent = @model.indentation
+% membrs = @model.params.map(&:name)
+%   .unshift('id').map{|e| ?: + e}.join(', ')
+%
+% params = 'id: SecureRanodm.uuid, ' + @model.keyword_params
+%
+<%= indent %># <%= @model.const %> <%= @model.desc %>
+<%= indent %># @!parse class <%= @model.const %> < Data
+<%= indent %>class <%= @model.const %> < Data.define(<%= membrs %>)
+<%= indent %>  <%= @model.params_yarpro.lines.join('  ' + indent) %>
+<%= indent %>
+<%= indent %>  <%= @model.params_yardoc.lines.join('  ' + indent) %>
+<%= indent %>  def initialize(<%= params %>)
+<%= indent %>    <%= @model.params_guard.lines.join('    ' + indent) %>
+<%= indent %>    super
+<%= indent %>  end
+<%= indent %>end
 
 <%= @model.close_namespace %>

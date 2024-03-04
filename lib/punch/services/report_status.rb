@@ -10,7 +10,7 @@ module Punch
       include Punch::Hashed
 
       def call
-        look_through_folders(config.lib, config.test)
+        look_through_folders(conf.lib, conf.test)
       end
 
       protected

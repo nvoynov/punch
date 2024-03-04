@@ -1,8 +1,10 @@
-require_relative "../test_helper"
+require_relative "../../test_helper"
 
-class TestModelBuilder < Minitest::Test
+class TestBuildModel < Minitest::Test
+  include Punch::Models
+
   def builder
-    ModelBuilder
+    BuildModel
   end
 
   def test_call
@@ -16,16 +18,12 @@ class TestModelBuilder < Minitest::Test
 
     param = m.params[0]
     assert_equal 'a', param.name
-    assert param.positional?
-    refute param.keyword?
     refute param.default?
     refute param.sentry?
 
     m = builder.('model', 'a:b "42"')
     param = m.params[0]
     assert_equal 'a', param.name
-    refute param.positional?
-    assert param.keyword?
     assert param.default?
     assert param.sentry?
   end

@@ -1,21 +1,20 @@
 ---
 title: Punch Readme
 keywords:
-- ruby
-- source-code-generator
-- interactor
-- service
-- entity
-- plugin
-- business-logic-layer
-- the-clean-architecture
-- domain-driven-design
+  - ruby
+  - source-code-generator
+  - interactor
+  - service
+  - entity
+  - plugin
+  - business-logic-layer
+  - the-clean-architecture
+  - domain-driven-design
 ...
-
 
 The Punch's basic idea is to provide a clean robust frame for domain business logic and bring efficiency to the design process.
 
-Playing last year with [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) I found it just a really amazing tool, but it also was a bit tiresome because of the necessity to create and require entities and services sources separately. That's why I designed Punch, which provides:  
+Playing last year with [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) I found it just a really amazing tool, but it also was a bit tiresome because of the necessity to create and require entities and services sources separately. That's why I designed Punch, which provides:
 
 - three basic blocks - entity, service, and plugin
 - source code templates for those blocks
@@ -27,11 +26,13 @@ You can find an example of a "punched" domain in [punch_users](https://github.co
 - 85% of source files were "punched" and 15% were created manually;
 - 50% of Ruby LOC were "punched" and the other 50% were created manually.
 
-Location   Total   "Punched" SLOC       Blank    Comments  Net Ruby LOC
----------- ------- --------- ---------- -------- --------- ------------
-lib        23 (17) 13 (13)   657 (329)  102 (53) 175 (93)  380 (183)
-test       17 (17) 15 (16)   363 (335)  46 (38)  45 (150)  272 (147)
-lib + test 40 (34) 28 (29)   1020 (664) 148 (91) 220 (243) 652 (330)
+Location Total "Punched" SLOC Blank Comments Net Ruby LOC
+
+---
+
+lib 23 (17) 13 (13) 657 (329) 102 (53) 175 (93) 380 (183)
+test 17 (17) 15 (16) 363 (335) 46 (38) 45 (150) 272 (147)
+lib + test 40 (34) 28 (29) 1020 (664) 148 (91) 220 (243) 652 (330)
 
 ## User Stories
 
@@ -75,15 +76,8 @@ When you change `domain` settings as `domain: domain`, code will be placed to `l
 
 - `lib/domain/services/sing_in.rb`
 - `lib/domain/services.rb~` (require "services/sign_in")
-- `test/domain/services/test_sing_in.rb`  
+- `test/domain/services/test_sing_in.rb`
 - `Domain::Services` will be the service namespace
-
-You can go even further and run `$ punch service user/sign_in email password` and it this case if will affect output as:
-
-- `lib/domain/services/user/sing_in.rb`
-- `lib/domain/services/user.rb~` (require "user/sign_in")
-- `test/domain/services/user/test_sing_in.rb`  
-- `Domain::Services::User` will be the service namespace
 
 ### Logging
 
@@ -107,7 +101,7 @@ module Services
 
   class SignUp < Service
 
-    def initialize(login, password)
+    def initialize(login:, password:)
       @login = login
       @password = password
     end
@@ -118,58 +112,58 @@ module Services
 end
 ```
 
+By default templates all parameters will be generated as keyword arguments. You can change the behaviour by customizing templates.
+
 The `login` and `password` parameters there could be passed in a few ways and the chosen way will affect for code generation output.
 
-1. Finishing parameters with `:` will tell the Punch to generate keyword arguments, so `sign_up login: password:` will generate constructor declaration as `def initialize(login:, password:)`
-2. Providing default values for parameters like `sign_up "login \"user\"" "password \"$ecret\""` will generate `def initialize(login = "user", password = "$ecret")`
-3. In the same manner you can provided default values for keyword arguments - `sign_up "login: \"user\"" "password: \"$ecret\""` will generate `def initialize(login: "user", password: "$ecret")`
-4. Positional and keyword arguments can be mixed together. Punch is advanced enough to place it into right order - positional first, positional with default values next, and keywords at the end.
-
-And finally we can meet the [Sentry](#punchsentry). For keyword arguments you can point a sentry, and being pointed for an argument, constructor will validate the argument with the provided sentry.
-
-Passing parameters as `sign_up login:login password:password` tell Punch to generate `login` and `password` sentries first, and then validate `login` and `secret` parameters inside constructor.
-
-In `sentries.rb` will be placed two new sentries unless they do not exist.
+[punch service sing-up "login \"user\"" secret]{.underline}
 
 ```ruby
-MustbeLogin = Sentry.new(:login, ...
-MustbePassword = Sentry.new(:secret, ...
+class SignUp < Service
+  def initialize(login: 'user', password:)
 ```
 
-The constructor became
+[punch service sing-up user_id:UUID "secret \"$ecret\""]{.underline}
 
 ```ruby
-def initialize(login:, password:)
-  @login = MustbeLogin.(login)
-  @secret = MustbePassword.(password)
-end
+class SignUp < Service
+  def initialize(user_id:, secret: '$ecret')
+    @user_id = MustbeUUID.(user_id, :user_id)
 ```
 
-Your new service being just "punched" is not ready to run because you need basic Service first (`class SignUp < Service`). The ["Punch Basics"](#punch-basics) section will explain the situation with basic concepts.
+Look into the [Sentry](#punchsentry) section for details.
+
+**NOTE** Your "punched" services will not work because of lacking basic Service class. The ["Punch Basics"](#punch-basics) section will explain the situation with basic concepts.
 
 ### "punch entity"
 
-The `$punch entity NAME [PARAM] [PARAM]..` command follows the same principles, but its default template also generates `attr_reader` for parameters. An example follows
+The `$punch entity NAME [PARAM] [PARAM]..` command follows the same principles but uses anoher template based on Ruby 3.2. Data class. Basically it will look like Data.define
+
+[$ punch entity user login secret]{.underline}
 
 ```ruby
-module Entities
+class User < Data.define(:login, :secret)
+  def initialize(login:, secret:)
+    super
+  end
+end
+```
 
-  class User < Entity
-    attr_reader :login
-    attr_reader :secret
+[$ punch entity user login:email "secret:string \"$secret\""]{.underline}
 
-    def initialize(id:, login:, password:)
-      super(id)
-      @login = MustbeLogin.(login)
-      @secret = MustbePassword.(password)
-    end
+```ruby
+class User < Data.define(:login, :secret)
+  def initialize(login:, secret: '$ecret')
+    MustbeEmail.(login, :login)
+    MustbeString.(secret, :secret)
+    super
   end
 end
 ```
 
 ### "punch plugin"
 
-The `punch plugin NAME [PARAM] [PARAM]..` command will "punch" Plugin, the command behavior is similar to `punch service/entity`. In addition it will create `config.rb` file with PluginHolder placed there.
+The `punch plugin NAME` command will "punch" Plugin, but it will be easier just to preview its result running `$ punch preview plugin store`
 
 ### "punch preview"
 
@@ -189,7 +183,6 @@ Punch can provide you with its own basic concept it itself designed upon. The `$
 
 ```
 lib/punch/basics/sentry.rb
-lib/punch/basics/entity.rb
 lib/punch/basics/service.rb
 lib/punch/basics/plugin.rb
 lib/punch/basics.rb
@@ -235,10 +228,6 @@ class SingIn < Service
   end
 end
 ```
-
-#### Punch::Entity
-
-[Entity](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/entity.rb) is just minimal entity class with `id` attribute that passed nil becomes `SecureRandom.uuid`
 
 #### Punch::Plugin
 
@@ -298,7 +287,7 @@ README.md
 
 Looking through [sample.rb](https://github.com/nvoynov/punch/blob/master/lib/assets/domain/sample.rb), you can express your domain and then generate it with `dogen.rb` script.
 
-__Besides the domain code generation__, you can use domain metadata for "punching" whatever you want to generate from entities, services, plugins, and actors. For example, I going to generate my next SRS skeleton for [Marko](https://github.com/nvoynov/marko) with actors, use cases, and entities.
+**Besides the domain code generation**, you can use domain metadata for "punching" whatever you want to generate from entities, services, plugins, and actors. For example, I going to generate my next SRS skeleton for [Marko](https://github.com/nvoynov/marko) with actors, use cases, and entities.
 
 ### App design
 

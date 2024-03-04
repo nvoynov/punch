@@ -43,7 +43,7 @@ describe 'exe/punch' do
   it 'must punch domain by dogen' do
     bundled {
       system "punch domain"
-      system "ruby domain/dogen.rb"
+      system "ruby ./punch/domain/dogen.rb"
     }
   end
 

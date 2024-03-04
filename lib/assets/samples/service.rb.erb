@@ -1,20 +1,23 @@
-<% @spacer = '  ' * (@model.namespace.split(/::/).size - 1) -%>
 # frozen_string_literal: true
-require_relative "service"
+require_relative 'service'
 
 <%= @model.open_namespace %>
-<%= @spacer %>  # <%= @model.desc %>
-<%= @spacer %>  class <%= @model.const %> < Service
 
-<%= @model.yardoc.lines.map{"#{@spacer}    #{_1}"}.join %>
-<%= @spacer %>    def initialize(<%= @model.parameters %>)
-<%= @model.assignment.lines.map{"#{@spacer}      #{_1}"}.join %>
-<%= @spacer %>    end
-
-<%= @spacer %>    def call
-<%= @spacer %>      # user = storage.find(User, email: @email)
-<%= @spacer %>      fail "#{self.class}#call UNDER CONSTRUCTION"
-<%= @spacer %>    end
-<%= @spacer %>  end
+% indent = @model.indentation
+<%= indent %># <%= @model.const %> <%= @model.desc %>
+<%= indent %>class <%= @model.const %> < Service
+<%= indent %>  <%= @model.params_yardoc.lines.join('  ' + indent) %>
+<%= indent %>  def initialize(<%= @model.keyword_params %>)
+<%= indent %>    <%= @model.params_guard.lines.join('    ' + indent) %>
+<%= indent %>    super
+<%= indent %>  end
+<%= indent %>
+<%= indent %>  # @return [] what?
+<%= indent %>  def call
+<%= indent %>    # user = store.get(User, id: @user_id)
+<%= indent %>    # fail "unkown user #{@user_id}" unless user
+<%= indent %>    fail "#{self.class}#call must be overridden"
+<%= indent %>  end
+<%= indent %>end
 
 <%= @model.close_namespace %>

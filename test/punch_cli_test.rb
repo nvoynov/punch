@@ -1,5 +1,7 @@
 require_relative "test_helper"
 
+LoggerHolder.object = Logger.new(IO::NULL)
+
 class TestCLI < Minitest::Test
 
   def dummy

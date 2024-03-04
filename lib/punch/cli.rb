@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "model"
+require_relative "models"
 require_relative "plugins"
 require_relative "services"
 require_relative "version"
@@ -11,8 +11,8 @@ module Punch
   module CLI
     extend self
     extend Forwardable
-    def_delegator :PlayboxPlug, :object, :playbox
-    def_delegator :LoggerPlug,  :object, :logger
+    def_delegator :PlayboxHolder, :object, :playbox
+    def_delegator :LoggerHolder, :object, :logger
 
     # create new Punch project
     # @param dir [String] project directory name
@@ -27,8 +27,6 @@ module Punch
     # @param *args [Array<String>] where the first item
     #   must be model klass :entity or :service,
     #   the rest items are klass parameters
-    #
-    # I can't see any sense to punch just sentry there
     def source(*args)
       return unless punch_home?
 
@@ -40,9 +38,15 @@ module Punch
 
       secure_call {
         logger.info { "punch #{klass} #{args.join(?\s)}" }
-        model = ModelBuilder.(*args)
-        service = klass == :plugin ? PunchPlugin : PunchSource
-        service.(klass, model)
+        case klass
+        when :plugin
+          model = Punch::Models::Plugin.new(name: args.shift)
+          PunchPlugin.(model)
+        when :entity
+          PunchEntity.(BuildModel.(*args))
+        when :service
+          PunchService.(BuildModel.(*args))
+        end
       }
     end
 
@@ -73,7 +77,7 @@ module Punch
     # preview the result of the punch
     def preview(*args)
       return unless punch_home?
-      PlayboxPlug.plugin Preview
+      PlayboxHolder.plugin Preview
       logger.info { "preview #{args.join(?\s)}"  }
       source(*args)
     end
@@ -157,18 +161,17 @@ module Punch
       Usage:
         bundle add punch --git https://github.com/nvoynov/punch.git
 
-        punch new DIRECTORY                Create a new Punch project
+        punch new DIRECTORY                punch new Project
 
-        punch entity NAME [PARAM..]        Punch new entity concept
+        punch entity NAME [PARAM..]        punch new Entity
           PARAM: name[:][sentry][default]  zero or more parameters
 
-        punch service NAME [PARAM..]       Punch new service concept
+        punch service NAME [PARAM..]       punch new Service
           PARAM: name[:][sentry][default]  zero or more parameters
 
-        punch plugin NAME [PARAM..]        Punch new plugin concept
-          PARAM: name[:][sentry][default]  zero or more parameters
+        punch plugin NAME                  punch new Plugin
 
-        punch preview COMMAND              Preview generation result
+        punch preview COMMAND              preview Punch result
           service NAME [PARAM..]           command to preview...
           entity NAME [PARAM..]
           plugin NAME [PARAM..]

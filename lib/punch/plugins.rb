@@ -3,14 +3,14 @@
 require "logger"
 require_relative "plugins/playbox"
 require_relative "plugins/preview"
+require_relative "config"
 
 module Punch
 
-  PlayboxPlug = Playbox.plugin
-  PreviewPlug = Preview.plugin
+  PlayboxHolder = Playbox.plugin
+  PreviewHolder = Preview.plugin
 
   Logger.extend(Plugin)
-  LoggerPlug  = Logger.plugin
-  LoggerPlug.object = Logger.new(IO::NULL)
+  LoggerHolder = Logger.plugin
 
 end

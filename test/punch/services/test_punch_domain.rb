@@ -9,7 +9,7 @@ describe PunchDomain do
     Sandbox.() {
       domain = build_sample_domain
       log = service.(domain)
-      refute log.empty?
+      refute_empty log
       # puts "-= Default Configuration =-"
       # payload = ["lib/config.rb"]
       # puts log
@@ -17,17 +17,13 @@ describe PunchDomain do
     }
 
     Sandbox.() {
-      @config = Punch::Config.new('lib', 'test', 'dom', 'sen', 'ent', 'ser', 'plg')
+      @config = Config.new(domain: 'dom')
       domain = build_sample_domain
       log = []
-      Punch.stub :config, @config do
+      ConfigHolder.stub :object, @config do
         log = service.(domain)
       end
-      refute log.empty?
-      # puts "-= Custom Configuration =-"
-      # payload = ["lib/dom/config.rb", "lib/dom.rb"]
-      # puts log
-      # print_content(*payload)
+      refute_empty log
     }
   end
 end

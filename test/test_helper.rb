@@ -20,7 +20,7 @@ class Sandbox
   def self.call
     Dir.mktmpdir([TMPRX]) do |dir|
       Dir.chdir(dir) do
-        playbox = PlayboxPlug.object
+        playbox = PlayboxHolder.object
         playbox.punch_home(DUMMY)
         Dir.chdir(DUMMY){ yield }
       end

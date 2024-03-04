@@ -4,7 +4,7 @@ require "punch/dsl"
 include Punch
 
 def build_sample_domain
-  DSL::Builder.build do
+  DSL::Domain.() do
     sentry :email, 'must be valid email address'
     sentry :password, 'at least 8 symbols with digits'
 

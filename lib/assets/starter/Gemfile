@@ -8,7 +8,5 @@ source "https://rubygems.org"
 group :development do
   gem "rake"
   gem "minitest"
-  # @todo try to use local repository instead of remote
-  # [Bundler Config. Local Git Repos](https://bundler.io/v2.4/man/bundle-config.1.html)
   gem "punch", git: "https://github.com/nvoynov/punch.git"
 end

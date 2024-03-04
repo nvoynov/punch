@@ -1,13 +1,33 @@
 require_relative "<%= @model.test_helper %>"
 include <%= @model.namespace %>
 
+# Use the following pattern when the <%= @model.const %> is just an interface to be implemented in App
+# module <%= @model.const %>Tests
+#   def plugin
+#     fail "override it in plugin implementation test"
+#   end
+#
+#   def test_one
+#     plugin.one
+#   end
+#
+#   def test_two
+#     plugin.two
+#   end
+# end
+#
+# class Test<%= @model.const %>Implementation < Minitest::Test
+#   include <%= @model.const %>Tests
+#   def plugin
+#     <%= @model.const %>Implementation.new
+#   end
+# end
+
 class Test<%= @model.const %> < Minitest::Test
   def plugin
-    <%= @model.const %>.new(<%= @model.arguments %>)
+    <%= @model.const %>.new
   end
 
-  def test_some_method
-    skip "UNDER CONSTRUCTION"
+  def test_one
   end
-
 end

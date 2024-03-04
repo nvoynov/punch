@@ -3,13 +3,13 @@ include <%= @model.namespace %>
 
 describe <%= @model.const %> do
   let(:service) { <%= @model.const %> }
-  # let(:payload) { {<%= @model.arguments %>} }
+  # let(:payload) { {<%= @model.keyword_params %>} }
 
   it {
-    skip "UNDER CONSTRUCTION"
-    service.()
-    # there are no plugins implemented at the moment
-    # so its behaviour should be stubbded and mocked
+    skip "design test for <%= @model.const %>"
+    assert_raises(ArgumentError) { service.() }
+    #
+    # plugin methods should be stubbded or mocked
     #
     # PluginHolder.object.stub :get, dummy do
     #   assert_equal dummy, service.(**payload)

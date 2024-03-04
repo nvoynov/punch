@@ -8,5 +8,5 @@
 # !Gemfile
 # !Gemfile.lock
 
-# Ignore inside sources
+# Ignore backups
 **/*~
