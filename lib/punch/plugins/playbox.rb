@@ -56,11 +56,10 @@ module Punch
       basicsrb = File.join(*location)
       punchrb = conf.domain.empty? ? "punch" : "../punch"
       content = <<~EOF
-        require_relative "#{punchrb}"
+        require_relative '#{punchrb}'
 
-        Sentry = Punch::Sentry
-        Entity = Punch::Entity
-        Plugin = Punch::Plugin
+        Sentry  = Punch::Sentry
+        Plugin  = Punch::Plugin
         Service = Punch::Service
       EOF
       File.write(basicsrb, content)

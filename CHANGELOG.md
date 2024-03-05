@@ -6,10 +6,18 @@ title: Punch Changelog
 
 TODO
 
+- [ ] place docker.rake at lib/tasks
+- [ ] provide default service
 - [ ] assets/samples tests
 - [ ] PunchXyz tests for proper log, to avoid the necessity of 0.7.1 :)
 - [ ] test_cli.rb under "bundle exec rake test" with CLEAN console
 - [ ] test_exe.rb under "bundle exec rake test" with CLEAN console
+
+## [0.7.2] - 2024-03-05
+
+- removed entity from punch basics result
+- designed INTRO.md
+- redesigned README.md
 
 ## [0.7.1] - 2024-03-04
 

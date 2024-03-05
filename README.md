@@ -12,37 +12,8 @@ keywords:
   - domain-driven-design
 ...
 
-The Punch's basic idea is to provide a clean robust frame for domain business logic and bring efficiency to the design process.
+The Punch is an opinionated Ruby Code Generator for Business Logic Layer, built with principles [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) and Domain Driven Design. Read [Intro](INTRO.md) to gasp some basic ideas.
 
-Playing last year with [The Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) I found it just a really amazing tool, but it also was a bit tiresome because of the necessity to create and require entities and services sources separately. That's why I designed Punch, which provides:
-
-- three basic blocks - entity, service, and plugin
-- source code templates for those blocks
-- command-line interface for punching those blocks
-- simple domain DSL to express and "punch" domains
-
-You can find an example of a "punched" domain in [punch_users](https://github.com/nvoynov/punch_users.git) repository that could speak a bit for the Punch efficiency.
-
-- 85% of source files were "punched" and 15% were created manually;
-- 50% of Ruby LOC were "punched" and the other 50% were created manually.
-
-Location Total "Punched" SLOC Blank Comments Net Ruby LOC
-
----
-
-lib 23 (17) 13 (13) 657 (329) 102 (53) 175 (93) 380 (183)
-test 17 (17) 15 (16) 363 (335) 46 (38) 45 (150) 272 (147)
-lib + test 40 (34) 28 (29) 1020 (664) 148 (91) 220 (243) 652 (330)
-
-## User Stories
-
-Punch has started from just a few following stories that I hope clearly translate its premises and will still be relevant as the project goes further.
-
-**Architecture** I want to design my code base in accord with The Clean Architecture principles, so it will be easy to write, read, test, and evolve.
-
-**Business logic** I want to start as small as possible just with PORO business logic by adopting just a few core concepts (Service, Entity, Plugin) so that I will have a clean domain at the beginning. When my business logic is ready I'll get to particular technologies (CLI, Web, API, Message Broker, Storage, external API, etc.)
-
-**Generators** I want to have a few generators for my basic concepts (entities, services), that way I hope to boost my productivity and reduce mistakes through generating instead of writing manually.
 
 ## Installation
 
@@ -52,13 +23,35 @@ Install the gem and add to the application's Gemfile by executing:
 
 ## Usage
 
-### Quickstart
+Run the following command for basic usage:
 
-Just run `$ punch` and see banner for basic usage, create a new Punch Project by `$ punch new DIRECTORY`, and run a few `$ punch preview` commands inside the `DIRECTORY`.
+    $ punch
 
-### Configuration
+then punch a new project:
 
-Punch can be configured through `punch.yml` file that can be found inside your punch project. One can point out directories for punching based on a particular concept. The default settings are:
+    $ punch new DIRECTORY
+    $ cd DIRECTORY
+
+then preview some commands:
+
+    $ punch preview service user-sing-up email
+    $ punch preview service user-sign-up email:email
+    $ punch preview entity user name email secret
+    $ punch preview plugin store
+
+Proceed with customizing templates and "punching" previews when the result will match your expectations (by punching samples and customizing ./punch/samples/*.rb.erb)
+
+    $ punch samples
+
+And maybe finally
+
+    $ punch basics
+
+Advanced Stuff in [DSL](#dsl) section
+
+### Configure
+
+One can configure "punching" process by editing `punch.yml` that says which folder should be used for services, entities, plugins. The defaults are:
 
 ```yml
 lib: lib
@@ -70,228 +63,77 @@ services: services
 plugins: plugins
 ```
 
-In accordance with these settings `Punch` will generate code inside `lib` and tests inside `test`. [Sentries](#sentry) will be punched into `lib/sentries.rb`, entities and services respectively into `lib/entities` and `lib/services`; concepts namespaces will be `Entities`, `Services`, and `Plugins`
-
-When you change `domain` settings as `domain: domain`, code will be placed to `lib/domain`. Assuming running the `$ punch service sign_in email password` command Punch will generate
-
-- `lib/domain/services/sing_in.rb`
-- `lib/domain/services.rb~` (require "services/sign_in")
-- `test/domain/services/test_sing_in.rb`
-- `Domain::Services` will be the service namespace
+I would recommend set "domain" property - it will structure sources in gem-like manner
 
 ### Logging
 
-Punch logs all commands and errors in `punch.log` file.
+Punch logs all commands and errors in `punch.log`.
 
 ```
-[2023-01-12 15:11:34 +0200] INFO : punch queries
-[2023-01-12 15:11:34 +0200] INFO : lib/users/plugins/queries.rb, lib/users/plugins.rb~, lib/users/config.rb~, test/users/plugins/test_queries.rb
+[2023-01-12 15:11:34 +0200] INFO : punch plugin store
+[2023-01-12 15:11:34 +0200] INFO : lib/plugins/store.rb, lib/plugins.rb~, lib/, test/plugins/test_store.rb
 ```
 
-### "punch service"
+### Status
 
-The `$ punch service NAME [PARM] [PARAM] ...` command will punch a new service and its test into your "punched" project. Code will be generated only when the current folder contains `punch.yml`.
+The `$ punch status` command provides you with basic info about "punched" sources, like how many sources you have punched and how many are still in the wild punched state.
 
-The output of the command will be the list of created or modified source files by the command. It is safe enough to prevent you from losing important changes inside punched sources. So when you "punched" some source and then "re-punch" the same concept again, Punch will check was the content changed from its punched state. The command will be aborted for changed content, or the previous copy will be backed for "wild-punched" content.
+### Samples
 
-When you run something like `$punch service sign_up login password`, Punch will generate code according with service template, something like follows
+Punch templates serves exactly to my own needs, but one customize it for its own purpose and shape. These templates are just ERB based on [Punch::Decors::Model](lib/punch/decors/model.rb)
+
+    $ punch samples
+
+simplifying a bit, it's quite simple things models
 
 ```ruby
-module Services
+module Punch
+  module Models
+    Param  = Data.define(:name, :sentry, :default, :desc)
+    Model  = Data.define(:name, :params, :desc)
+    Plugin = Data.define(:name, :desc)
+    Sentry = Data.define(:name, :desc, :proc)
+  end
+end
+```
 
-  class SignUp < Service
+and decorator
 
-    def initialize(login:, password:)
-      @login = login
-      @password = password
+```ruby
+module Punch
+  module Decors
+
+    class Model < Decor
+      def const;          end
+      def namespace;      end
+      def indentation;    end
+      def open_namespace; end
+      def close_namespace;end
+      def regular_params; end
+      def keyword_params; end
+      def params_yardoc;  end
+      def params_yarpro;  end
+      def params_guard;   end
+      def test_helper;    end
     end
 
-    def call
-    end
   end
 end
-```
+```    
 
-By default templates all parameters will be generated as keyword arguments. You can change the behaviour by customizing templates.
+### Basics
 
-The `login` and `password` parameters there could be passed in a few ways and the chosen way will affect for code generation output.
+When one satisfied with default templates to force the punched code work, one should furnish the project with Punch Basics - Service, Plugin, Sentry. The following command will bring it inside "lib/punch/basics" directory.
 
-[punch service sing-up "login \"user\"" secret]{.underline}
+### DSL
 
-```ruby
-class SignUp < Service
-  def initialize(login: 'user', password:)
-```
+When one have some sort of domain requirements, understands actors and services, one could use describe the domain by DSL and generate the whole domain "at one punch"
 
-[punch service sing-up user_id:UUID "secret \"$ecret\""]{.underline}
+    $ punch domain
 
-```ruby
-class SignUp < Service
-  def initialize(user_id:, secret: '$ecret')
-    @user_id = MustbeUUID.(user_id, :user_id)
-```
+Look through [sample.rb](https://github.com/nvoynov/punch/blob/master/lib/assets/domain/sample.rb), express your own and then generate it with `dogen.rb` script.
 
-Look into the [Sentry](#punchsentry) section for details.
-
-**NOTE** Your "punched" services will not work because of lacking basic Service class. The ["Punch Basics"](#punch-basics) section will explain the situation with basic concepts.
-
-### "punch entity"
-
-The `$punch entity NAME [PARAM] [PARAM]..` command follows the same principles but uses anoher template based on Ruby 3.2. Data class. Basically it will look like Data.define
-
-[$ punch entity user login secret]{.underline}
-
-```ruby
-class User < Data.define(:login, :secret)
-  def initialize(login:, secret:)
-    super
-  end
-end
-```
-
-[$ punch entity user login:email "secret:string \"$secret\""]{.underline}
-
-```ruby
-class User < Data.define(:login, :secret)
-  def initialize(login:, secret: '$ecret')
-    MustbeEmail.(login, :login)
-    MustbeString.(secret, :secret)
-    super
-  end
-end
-```
-
-### "punch plugin"
-
-The `punch plugin NAME` command will "punch" Plugin, but it will be easier just to preview its result running `$ punch preview plugin store`
-
-### "punch preview"
-
-The `punch preview` command prints the generated code instead of write so you can preview before you punch.
-
-### "punch status"
-
-The `$ punch status` command provides you with basic information about "punched" sources, like how many sources you have punched and how many are still in the wild punched state.
-
-### "punch samples"
-
-You can customize default Punch templates according to your particular purpose. The `$ punch samples` command will copy default templates into your project in `.punch/samples` folder and Punch will get templates from there. Those templates are just ERB based on Punch::SentryDecor and Punch::SourceDecor.
-
-### "punch basics"
-
-Punch can provide you with its own basic concept it itself designed upon. The `$ punch basics` command will copy sources as follows. You can use those as a starter and evolve according to your needs.
-
-```
-lib/punch/basics/sentry.rb
-lib/punch/basics/service.rb
-lib/punch/basics/plugin.rb
-lib/punch/basics.rb
-lib/punch.rb
-```
-
-#### Punch::Sentry
-
-[Sentry](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/sentry.rb) is a simple module with straight and only purpose - to ensure that argument is valid or raise failure otherwise.
-
-```ruby
-ShortString = Sentry.new(:str, "must be String[3..100]"
-) {|v| v.is_a?(String) && v.size.between?(3,100)}
-
-ShortString.("string") # => "string"
-
-ShortString.("s")
-# => ArgumentError ":str must be String[3..100]"
-
-ShortString.(nil, :name)
-# => ArgumentError ":name must be String[3..100]"
-
-ShortString.(nil, 'John Doe', 'Ups!')
-# => ArgumentError ":John Doe Ups!"
-```
-
-#### Punch::Service
-
-[Service](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/servie.rb) is very basic class where one supposed to override `#call` method to do some job.
-
-```ruby
-class SingIn < Service
-  def intitialize(login, password)
-    @login = login
-    @password = password
-  end
-
-  def call
-    user = storage.get(User, login: @login)
-    fail "Wrong login or password" unless user
-    fail "Wrong login or password" unless user.password == password
-    user
-  end
-end
-```
-
-#### Punch::Plugin
-
-[Plugin](https://github.com/nvoynov/punch/blob/master/lib/punch/basics/plugin.rb) is a simple mixin for your plugin interfaces - logic external to the domain. The mixin provides `plugin` method that creates a new module that serves for plugin holder
-
-```ruby
-# store interface
-class Store
-  extend Plugin
-  # skipped..
-end
-
-# -= config.rb =-
-# store holder
-StoreHolder = Store.plugin
-
-# in-memory store implementation
-class InMemoryStore < Store
-  # skipped..
-end
-
-# change holder
-StoreHolder.plugin InMemoryStore
-
-# get access to holder object
-store = StoreHolder.object
-store.q(Article, where: {name: /Ruby/})
-```
-
-Having such "holder" you can use it for sort of dependency injection
-
-```ruby
-require "forwardable"
-require "basics"
-require "config"
-
-class UserSignUp < Service
-  extend Forwardable
-  def_delegator :StorageHolder, :object, :storage
-  def_delegator :SecretsHolder, :object, :secrets
- # skipped ..
-end
-```
-
-### "punch domain"
-
-Punch goes a bit further than just a source code generator for services and entities and provides DSL for describing domains of those things.
-
-The `$ punch domain` command create `.punch/domain` folder with a few Ruby sources inside your punched project:
-
-```
-sample.rb
-domain.rb
-dogen.rb
-README.md
-```
-
-Looking through [sample.rb](https://github.com/nvoynov/punch/blob/master/lib/assets/domain/sample.rb), you can express your domain and then generate it with `dogen.rb` script.
-
-**Besides the domain code generation**, you can use domain metadata for "punching" whatever you want to generate from entities, services, plugins, and actors. For example, I going to generate my next SRS skeleton for [Marko](https://github.com/nvoynov/marko) with actors, use cases, and entities.
-
-### App design
-
-The [punch_orders](https://github.com/nvoynov/punch_orders) repository provides an example of how to design apps with a business logic layer. You can find there an "Orders Domain" with a few actors, entities, and services as well as three apps on different tech (dRuby, Rack, and RabbitMQ) that share the domain business logic, presenters, and data store.
+__NOTE__ besides the ruby code generation, the domain in quite interesting thing to generate whatever you want, like some sort of documentation, diagrams, etc. I generated SRS skeleton for [Marko](https://github.com/nvoynov/marko) with actors, use cases, and entities.
 
 ## Development
 
