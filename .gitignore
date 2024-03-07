@@ -10,3 +10,4 @@ punch.yml
 punch.log
 /test/sandbox/
 /.tmp/
+.DS_Store
