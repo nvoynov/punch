@@ -1,6 +1,7 @@
 domain: nvoynov.github.io/punch
 title: Punch
 pages:
-- README.md
-- CHANGELOG.md
-- STORY.md
+  - README.md
+  - CHANGELOG.md
+  - INRO.md
+  - STORY.md

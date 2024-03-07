@@ -98,7 +98,7 @@ module Punch
     # report project status
     def status
       return unless punch_home?
-      puts ReportStatus.()
+      puts BuildReport.()
     end
 
     def banner

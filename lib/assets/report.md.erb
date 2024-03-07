@@ -1,0 +1,66 @@
+% time = Time.now.strftime('%H:%M:%S')
+% date = Time.now.strftime('%Y-%m-%d')
+%% Punch Report, on <%= date %> at <%= time %>
+
+: Total Sources (*.rb), [^1]
+
+% Row = Data.define(:loc, :files, :punched, :changed)
+%
+% total = Row.new('total', sources.size,
+%   sources.select(&:punched).size,
+%   sources.select(&:changed).size
+% )
+%
+% rows = sources.group_by(&:location).map{|k, v|
+%   Row.new(k, v.size,
+%     v.select(&:punched).size,
+%     v.select(&:changed).size
+%   )
+% }.push(total)
+%
+% len = rows.map{ _1.loc.size }.max
+% rjust = proc{|v, width| v.to_s.rjust(width) }
+% ljust = proc{|v, width| v.to_s.ljust(width) }
+%
+% head = <<~EOF
+%   #{'Dir'.ljust(len)}   Files Punched Changed
+%   #{?- * len} ------- ------- -------
+% EOF
+%
+% fmtrow = proc{|row|
+%   ljust[row.loc, len] + rjust[row.files, 8] + rjust[row.punched, 8] + rjust[row.punched, 8] + ?\n
+% }
+%
+% def time_ago(timestamp)
+%   delta = Time.now.to_i - timestamp.to_i
+%   case delta
+%   when 0..30         then "just now"
+%   when 31..119       then "about a minute ago"
+%   when 120..3599     then "#{delta / 60} minutes ago"
+%   when 3600..86399   then "#{(delta / 3600).round} hours ago"
+%   when 86400..259199 then "#{(delta / 86400).round} days ago"
+%   else Time.at(timestamp).strftime('%d %B %Y %H:%M')
+%   end
+% end
+<%= head %>
+% rows.each do |row|
+<%= fmtrow[row] %>
+% end
+% untouched = sources.reject(&:changed).group_by(&:location)
+% untouched.each do |loc, items|
+
+[<%= loc %>]{.underline} require attention:
+
+<%= items.map{|e| "- #{e.filename}, punched #{time_ago(e.created_at)}" }.join(?\n) %>
+
+% end
+
+[^1]: To get more source code statistics
+
+    $ scc lib test
+
+
+[^2]: Use Pandoc to generate the report
+
+    $ punch stats > stats.md
+    $ pandoc -o stats.html stats.md
