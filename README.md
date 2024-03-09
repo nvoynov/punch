@@ -78,6 +78,10 @@ Punch logs all commands and errors in `punch.log`.
 
 The `$ punch status` command provides you with basic info about "punched" sources, like how many sources you have punched and how many are still in the wild punched state.
 
+When you need to store or send the report to someone else, you can use Pandoc and translate it into any supported format.
+
+    $ timespent | pandoc -s -f markdown -o report.html
+
 ### Samples
 
 Punch templates serves exactly to my own needs, but one customize it for its own purpose and shape. These templates are just ERB based on [Punch::Decors::Model](lib/punch/decors/model.rb)

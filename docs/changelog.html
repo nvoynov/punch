@@ -29,7 +29,7 @@
 <span class="smallcaps">=
 <strong><code>Punch.(Domain.(DSL))</code></strong> = <a
 href="readme.html">Readme</a> ~ <a href="changelog.html">Changelog</a> ~
-<a href="story.html">Story</a> ~ <a
+<a href="story.html">Story</a> ~ <a href="intro.html">Intro</a> ~ <a
 href="https://github.com/nvoynov/punch">Github</a></span>
 </p>
 <header id="title-block-header">
@@ -37,30 +37,99 @@ href="https://github.com/nvoynov/punch">Github</a></span>
 </header>
 <nav id="TOC" role="doc-toc">
 <ul>
+<li><a href="#todo" id="toc-todo">TODO</a></li>
 <li><a href="#unreleased" id="toc-unreleased">[Unreleased]</a></li>
-<li><a href="#section" id="toc-section">[0.6.3] - 2023-01-24</a></li>
-<li><a href="#section-1" id="toc-section-1">[0.6.2] -
+<li><a href="#section" id="toc-section">[0.7.3] - 2024-03-09</a></li>
+<li><a href="#section-1" id="toc-section-1">[0.7.0] -
+2024-03-04</a></li>
+<li><a href="#section-2" id="toc-section-2">[0.6.4] -
+2023-12-12</a></li>
+<li><a href="#section-3" id="toc-section-3">[0.6.3] -
+2023-01-24</a></li>
+<li><a href="#section-4" id="toc-section-4">[0.6.2] -
 2023-01-19</a></li>
-<li><a href="#section-2" id="toc-section-2">[0.6.1] -
+<li><a href="#section-5" id="toc-section-5">[0.6.1] -
 2023-01-14</a></li>
-<li><a href="#section-3" id="toc-section-3">[0.6.0] -
+<li><a href="#section-6" id="toc-section-6">[0.6.0] -
 2023-01-10</a></li>
-<li><a href="#section-4" id="toc-section-4">[0.5.1] -
+<li><a href="#section-7" id="toc-section-7">[0.5.1] -
 2023-01-08</a></li>
-<li><a href="#section-5" id="toc-section-5">[0.5.0] -
+<li><a href="#section-8" id="toc-section-8">[0.5.0] -
 2023-01-06</a></li>
-<li><a href="#section-6" id="toc-section-6">2022-07-11</a></li>
+<li><a href="#section-9" id="toc-section-9">2022-07-11</a></li>
 </ul>
 </nav>
+<h2 id="todo">TODO</h2>
+<ul class="task-list">
+<li><input type="checkbox" />furniture empty folder “md project; cd
+project; punch init”</li>
+<li><input type="checkbox" />place docker.rake at lib/tasks</li>
+<li><input type="checkbox" />provide default service</li>
+<li><input type="checkbox" />assets/samples tests</li>
+<li><input type="checkbox" />PunchXyz tests for proper log, to avoid the
+necessity of 0.7.1 :)</li>
+<li><input type="checkbox" />test_cli.rb under “bundle exec rake test”
+with CLEAN console</li>
+<li><input type="checkbox" />test_exe.rb under “bundle exec rake test”
+with CLEAN console</li>
+</ul>
 <h2 id="unreleased">[Unreleased]</h2>
-<h2 id="section">[0.6.3] - 2023-01-24</h2>
+<h2 id="section">[0.7.3] - 2024-03-09</h2>
+<ul>
+<li>removed entity from punch basics result</li>
+<li>designed new BuildReport service that builds report in Markdown
+(lib/assets/report.md.erb)</li>
+<li>designed new INTRO.md</li>
+<li>redesigned README.md</li>
+<li>updated “sancho” gem, Rakefile, Gemfile</li>
+<li>removed “docs” branch</li>
+<li>fixed Sentry decorator for CAPITAL case Uuid instead of UUID</li>
+<li>fixed PunchSentries that punched tests under
+lib/sentries/test_sentry.rb</li>
+<li>fixed PunchModel that log lib/services.rb~ punching the first
+service</li>
+</ul>
+<h2 id="section-1">[0.7.0] - 2024-03-04</h2>
+<p>A few weeks ago I finished the first commercial backend for a small
+domain of one actor, a dozen services, four entities, and three plugins.
+The domain was “punched” using Punch::DSL; bumped in a few
+inconveniences that were fixed by this release.</p>
+<ul>
+<li>designed new model based on Data class</li>
+<li>designed new DSL for Data class</li>
+<li>designed new decorators - no more paths calculating stuff</li>
+<li>designed new <a href="lib/punch/assets/samples/entity.rb.erb">entity
+sample</a> based on Ruby 3.2 Data class</li>
+<li>desgined new PunchSentries service</li>
+<li>desgined new PunchModel service (paths calculating stuff moved here)
+with PunchEntity, PunchService, PunchPlugin descendants</li>
+<li>designed new Config based on Data</li>
+<li>decision to use positional or keyword arguments moved into
+samples/*.rb.erb - one could replace <code>@model.keyword_params</code>
+for <code>@model.regular_params</code> (see <a
+href="lib/punch/decors/model.rb">model decorator</a> for other methods);
+can’t see the reson to use different approach in one project</li>
+<li>removed the ability of using nested folders for generated concepts;
+invoke <code>$ punch new service user/crate-order</code> will generate
+<code>lib/domain/services/user_create_order.rb</code></li>
+<li>removed extra <code>lib/punch/basic/entity.rb</code></li>
+<li>simplified plugin and test_plugin samples</li>
+</ul>
+<h2 id="section-2">[0.6.4] - 2023-12-12</h2>
+<ul>
+<li>moved to Ruby 3.2.2 (Psych and Tests)</li>
+<li>added .dockerignore</li>
+<li>added doker.rake</li>
+<li>changed Dockerfile</li>
+</ul>
+<h2 id="section-3">[0.6.3] - 2023-01-24</h2>
 <ul>
 <li>removed <code>plugin/logger</code>, replaced by regular Ruby
 Logger</li>
 <li>added few extra sample generators based on
 <code>DSL::Domain</code></li>
 </ul>
-<h2 id="section-1">[0.6.2] - 2023-01-19</h2>
+<h2 id="section-4">[0.6.2] - 2023-01-19</h2>
 <ul>
 <li>fixed typo in <code>$ punch status</code></li>
 <li>added <code>README.md</code> and <code>Dockerfile</code> for
@@ -78,7 +147,7 @@ setting</li>
 </ul></li>
 <li>improved README.md</li>
 </ul>
-<h2 id="section-2">[0.6.1] - 2023-01-14</h2>
+<h2 id="section-5">[0.6.1] - 2023-01-14</h2>
 <ul>
 <li>improved CLI by logging exception backtrace</li>
 <li>improved <code>CLI::BANNER</code></li>
@@ -91,7 +160,7 @@ punchers</li>
 <li>optimized most of <code>assets/samples</code></li>
 <li>updated README.md with <code>punch_users</code> statistics</li>
 </ul>
-<h2 id="section-3">[0.6.0] - 2023-01-10</h2>
+<h2 id="section-6">[0.6.0] - 2023-01-10</h2>
 <ul>
 <li>added <code>Punch::DSL::Plugin</code> and
 <code>DSL::Builder#plugin</code></li>
@@ -122,7 +191,7 @@ configuration</li>
 <code>&lt;domain&gt;.rb</code> that requires sentries, entities,
 services, plugins, basics, and config</li>
 </ul>
-<h2 id="section-4">[0.5.1] - 2023-01-08</h2>
+<h2 id="section-7">[0.5.1] - 2023-01-08</h2>
 <ul>
 <li>added test for <code>punch/basics</code></li>
 <li>added <code>PunchDomain</code> service</li>
@@ -131,20 +200,20 @@ services, plugins, basics, and config</li>
 <li>optimized samples</li>
 <li>optimized README</li>
 </ul>
-<h2 id="section-5">[0.5.0] - 2023-01-06</h2>
+<h2 id="section-8">[0.5.0] - 2023-01-06</h2>
 <ul>
 <li>source code completely redesigned</li>
 <li>added ability to punch plugins</li>
 <li>added DSL for design domains</li>
 <li>PORO, no dependencies except Bundler and Minitest</li>
 </ul>
-<h2 id="section-6">2022-07-11</h2>
+<h2 id="section-9">2022-07-11</h2>
 <ul>
 <li>Project started</li>
 </ul>
 <div id="footer">
 <hr />
-<p>© 2022-2023 <a href="http://nvoynov.github.io/">nvoynov</a></p>
+<p>© 2023-2024 <a href="http://nvoynov.github.io/">nvoynov</a></p>
 </div>
 </body>
 </html>

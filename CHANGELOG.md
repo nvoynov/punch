@@ -5,8 +5,6 @@ title: Punch Changelog
 ## TODO
 
 - [ ] furniture empty folder "md project; cd project; punch init"
-- [ ] update docs
-- [ ] report_status should be simplified to punched, remains punched - who needs SLOC should use https://github.com/boyter/scc
 - [ ] place docker.rake at lib/tasks
 - [ ] provide default service
 - [ ] assets/samples tests
@@ -16,18 +14,14 @@ title: Punch Changelog
 
 ## [Unreleased]
 
-[2024-03-06]{.underline}
-
-- designed new BuildReport service that builds report in Markdown (lib/assets/report.md.erb)
-
-## [0.7.2] - 2024-03-05
+## [0.7.3] - 2024-03-09
 
 - removed entity from punch basics result
-- designed INTRO.md
+- designed new BuildReport service that builds report in Markdown (lib/assets/report.md.erb)
+- designed new INTRO.md
 - redesigned README.md
-
-## [0.7.1] - 2024-03-04
-
+- updated "sancho" gem, Rakefile, Gemfile
+- removed "docs" branch
 - fixed Sentry decorator for CAPITAL case Uuid instead of UUID
 - fixed PunchSentries that punched tests under lib/sentries/test_sentry.rb
 - fixed PunchModel that log lib/services.rb~ punching the first service
