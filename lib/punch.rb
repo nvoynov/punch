@@ -1,3 +1,4 @@
+require_relative 'punch/version'
 require_relative 'punch/basic'
 require_relative 'punch/model'
 require_relative 'punch/ports'

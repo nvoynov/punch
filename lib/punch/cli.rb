@@ -1,3 +1,4 @@
+require_relative 'version'
 require_relative 'config'
 require 'fileutils'
 

@@ -2,8 +2,6 @@ require_relative 'ruby_code_store'
 
 module Punch
 
-  VERSION = '0.8.0'
-
   CLEAN_CONFIG = 'clean_architecture.yml'
   
   # Configuration

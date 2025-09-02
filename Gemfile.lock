@@ -1,16 +1,36 @@
+PATH
+  remote: .
+  specs:
+    punch (0.8.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
+    date (3.4.1)
+    io-console (0.8.0)
+    irb (1.14.3)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
     minitest (5.25.5)
+    psych (5.2.2)
+      date
+      stringio
     rake (13.3.0)
+    rdoc (6.10.0)
+      psych (>= 4.0.0)
+    reline (0.6.0)
+      io-console (~> 0.5)
+    stringio (3.1.2)
 
 PLATFORMS
   arm64-darwin-24
   ruby
 
 DEPENDENCIES
-  minitest
-  rake
+  irb
+  minitest (~> 5.16)
+  punch!
+  rake (~> 13.0)
 
 BUNDLED WITH
    2.6.9

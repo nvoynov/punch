@@ -1,7 +1,12 @@
-.gitingore
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
 **/*~
-*.log
 .DS_Store
-
 sandbox.rb
 sandbox.md

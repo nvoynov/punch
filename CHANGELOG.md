@@ -1,12 +1,12 @@
 % CHANGELOG
 
-## TODO
+## Unreleased TODO
 
 - [ ] Replace the Punch gem by it, fixing exe/punch
 - [ ] provide interactor and CLI for generating DSL
 - [ ] design PipeAndFilter with DSL and Puncher
 
-## v0.8.0 (2025-Sep-03)
+## [v0.8.0] 2025-Sep-03
 
 Punch drastically redesigned.
 
