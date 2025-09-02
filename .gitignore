@@ -1,0 +1,7 @@
+.gitingore
+**/*~
+*.log
+.DS_Store
+
+sandbox.rb
+sandbox.md

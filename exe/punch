@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+# require 'punch'
+require_relative '../lib/punch'
+
+Punch::CLI.parse(ARGV)

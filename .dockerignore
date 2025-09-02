@@ -1,0 +1,12 @@
+# Ignore all
+*
+
+# Allow sources
+!/bin/
+!/app/
+!/lib/
+!Gemfile
+!Gemfile.lock
+
+# Ignore backups
+**/*~
